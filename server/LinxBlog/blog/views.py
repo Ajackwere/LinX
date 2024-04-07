@@ -4,15 +4,67 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .forms import UserProfileForm
 from .models import UserProfile, Tag, Category, Blog, Comment
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.response import Response
 from .serializers import UserProfileSerializer, CategorySerializer, TagSerializer, CommentSerializer, BlogSerializer, UserSerializer
 from rest_framework.decorators import action
+from django.contrib.auth.models import User
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
 
 def index(request):
     return Response("Welcome to LinX blogsite server. Navigate to /swagger to see the documentation")
 
+class UserViewSet(viewsets.ViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    
+    @swagger_auto_schema(
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'username': openapi.Schema(type=openapi.TYPE_STRING, description='User username'),
+                'password1': openapi.Schema(type=openapi.TYPE_STRING, description='User password'),
+                'password2': openapi.Schema(type=openapi.TYPE_STRING, description='Password confirmation'),
+            },
+            required=['username', 'password1', 'password2']
+        )
+    )
+    def get_serializer(self, *args, **kwargs):
+        if 'data' in kwargs:
+            data = kwargs['data']
+            if isinstance(data, list):
+                kwargs['many'] = True
+        return self.serializer_class(*args, **kwargs)
+
+
+    @action(detail=False, methods=['POST'])
+    def register(self, request):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            username = serializer.validated_data['username']
+            password = serializer.validated_data['password1']
+            user = User.objects.create_user(username=username, password=password)
+            return Response(status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    @action(detail=False, methods=['POST'])
+    def login(self, request):
+        username = request.data.get('username')
+        password = request.data.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user:
+            login(request, user)
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response({'error_message': 'Invalid username or password.'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    @action(detail=False, methods=['POST'])
+    def logout(self, request):
+        logout(request)
+        return Response(status=status.HTTP_200_OK)
+    
 class UserProfileViewSet(viewsets.ModelViewSet):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
@@ -29,30 +81,9 @@ class UserProfileViewSet(viewsets.ModelViewSet):
         return render(request, 'update_profile.html', {'form': form})
 
     @action(detail=False, methods=['GET'])
-    def logout_view(self, request):
-        logout(request)
-        return redirect('login')
-
-    @action(detail=False, methods=['GET'])
     def profile(self, request):
         user = request.user
         return render(request, 'profile.html', {'user': user})
-
-    @action(detail=False, methods=['POST'])
-    def register(self, request):
-        if request.method == 'POST':
-            form = UserCreationForm(request.POST)
-            if form.is_valid():
-                user = form.save()
-                UserProfile.objects.create(user=user)
-                username = form.cleaned_data.get('username')
-                raw_password = form.cleaned_data.get('password1')
-                user = authenticate(username=username, password=raw_password)
-                login(request, user)
-                return redirect('update_profile')  
-        else:
-            form = UserCreationForm()
-        return render(request, 'registration/register.html', {'form': form})
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
