@@ -13,7 +13,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'django-insecure-n^k@#itz_qm5x2=jis@tk-_6+cfj!4#$)9bbyf8p^v53)5(nnd'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -76,9 +76,8 @@ DATABASES = {
     }
 }
 
-# DATABASES = {"de"}
-# postgres://jobhub_7vnv_user:VADSzxX4z1OqarVqfE2yeoXWcYfuFrJJ@dpg-cmrlbpa1hbls73fppub0-a/jobhub_7vnv
-
+DATABASES["default"] = dj_database_url.parse("postgres://jobhub_7vnv_user:VADSzxX4z1OqarVqfE2yeoXWcYfuFrJJ@dpg-cmrlbpa1hbls73fppub0-a.frankfurt-postgres.render.com/linx")
+ 
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -114,7 +113,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
