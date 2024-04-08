@@ -15,14 +15,16 @@ dotenv.load_dotenv()
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
+# DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 SECRET_KEY = os.getenv('SECRET_KEY')
 
+DEBUG=True
+ALLOWED_HOSTS = ['*']
 
-if DEBUG:
-    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-else:
-    ALLOWED_HOSTS = ['https://linx-2rrj.onrender.com', 'www.linx-2rrj.onrender.com', 'http://linx-2rrj.onrender.com']
+# if DEBUG:
+#     ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+# else:
+#     ALLOWED_HOSTS = ['https://linx-2rrj.onrender.com', 'www.linx-2rrj.onrender.com', 'http://linx-2rrj.onrender.com']
 
 # Application definition
 
