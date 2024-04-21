@@ -1,0 +1,6 @@
+.account-cnt {
+  display: flex;
+}
+.account-cnt section {
+  padding: 0 0.5rem;
+}

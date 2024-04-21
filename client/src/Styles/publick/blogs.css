@@ -8,11 +8,12 @@
   --overlay: #0000002a;
 }
 .blog-card {
-  width: 90vw;
+  width: 95vw;
   max-width: 700px;
   border: solid 1px var(--color5);
   position: relative;
   margin: 0 auto;
+  margin-bottom: 1rem;
 }
 .bc-title {
   margin-top: 1rem;
@@ -120,4 +121,9 @@
 }
 .bc-c-body .material-symbols-outlined {
   font-size: 1rem;
+}
+@media (max-width: 630px) {
+  .blogs-cnt {
+    padding-bottom: 7rem;
+  }
 }

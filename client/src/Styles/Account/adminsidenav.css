@@ -1,0 +1,35 @@
+.side-nav {
+  width: 240px;
+  height: 100vh;
+  background-color: #f9f7f7;
+}
+.side-nav a {
+  text-decoration: none;
+  color: black;
+}
+.side-nav-logo {
+  width: 6rem;
+  margin: 0 auto;
+  padding-top: 0.5rem;
+}
+.side-nav-logo img {
+  width: 100%;
+}
+.aside-navlinks {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.aside-navlinks li {
+  margin: 0.5rem;
+  padding: 0.5rem 0.3rem;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  border-radius: 0.3rem;
+  cursor: pointer;
+}
+aside .active li {
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  background-color: white;
+}

@@ -1,0 +1,25 @@
+.admin-body-nav {
+  display: flex;
+  justify-content: space-between;
+  width: 97%;
+  background-color: aliceblue;
+  margin: 0.5rem auto;
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  box-sizing: border-box;
+  position: sticky;
+  top: 1rem;
+}
+.account-body {
+  width: 100%;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.amn-sec {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}

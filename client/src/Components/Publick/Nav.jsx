@@ -35,11 +35,6 @@ function Nav() {
     "Business",
     "Technology",
     "Travel",
-    "Health & lifestyle",
-    "Beauty & Skincare",
-    "Business",
-    "Technology",
-    "Travel",
   ];
 
   return (
@@ -48,22 +43,18 @@ function Nav() {
         <div className="nav-logo">
           <img src={logo} alt="" />
         </div>
+        <div
+          className="nav-categoriy-cnt nav-c1"
+          onScroll={handleScroll}
+          ref={navCategoryRef}
+        >
+          <ul className="nav-categories">
+            {categories.map((category) => (
+              <li key={category}>{category}</li>
+            ))}
+          </ul>
+        </div>
         <ul className="nav-center">
-          <NavLink to="/">
-            <li>
-              <span className="material-symbols-outlined">home</span>
-              <div className="active-line"></div>
-            </li>
-          </NavLink>
-          <li>
-            <span className="material-symbols-outlined">bookmark</span>
-            <div className="active-line"></div>
-          </li>
-
-          <li>
-            <span className="material-symbols-outlined">notifications</span>
-            <div className="active-line"></div>
-          </li>
           <li className="nav-search-li">
             <div className="nav-search">
               <span className="material-symbols-outlined">search</span>
@@ -75,14 +66,11 @@ function Nav() {
             </div>
           </li>
           <li>
-            <div className="nav-profile nav-profile2">
-              <img src="" alt="" onError={vl.errorProfileImg} />
+            <div className="nav-profile">
+              <img src="" onError={vl.errorProfileImg} alt="" />
             </div>
           </li>
         </ul>
-        <div className="nav-profile">
-          <img src="" alt="" onError={vl.errorProfileImg} />
-        </div>
 
         <div className="nav-search2">
           <span className="material-symbols-outlined">search</span>
@@ -104,7 +92,7 @@ function Nav() {
           </div>
         )}
         <div
-          className="nav-categoriy-cnt"
+          className="nav-categoriy-cnt nav-c2"
           onScroll={handleScroll}
           ref={navCategoryRef}
         >
