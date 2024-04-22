@@ -11,6 +11,7 @@
   box-sizing: border-box;
   position: sticky;
   top: 1rem;
+  z-index: 90;
 }
 .account-body {
   width: 100%;
@@ -22,4 +23,33 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+}
+.adm-nav-menu-btn {
+  display: none;
+}
+@media (max-width: 800px) {
+  .admin-section-nav {
+    display: block;
+    position: sticky;
+    top: 0%;
+    left: 0%;
+    width: 100vw;
+    background-color: white;
+    padding: 0.5rem;
+  }
+  .admin-section-nav h1 {
+    margin: 0%;
+  }
+  .menu-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: fit-content;
+    cursor: pointer;
+  }
+  .adm-nav-menu-btn {
+    display: block;
+    cursor: pointer;
+    margin-right: 1rem;
+  }
 }

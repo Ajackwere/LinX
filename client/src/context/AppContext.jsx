@@ -2,15 +2,12 @@ import { createContext, useEffect, useState } from "react";
 
 const CONT = createContext(null);
 function Context({ children }) {
+  const [menuOpen, setMenuOpen] = useState(false);
   const functions = {
     formatCurrencyKE,
-    errorProfileImg,
+    menuOpen,
+    setMenuOpen,
   };
-
-  function errorProfileImg(e) {
-    e.target.src =
-      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
-  }
 
   function formatCurrencyKE(number) {
     if (isNaN(number)) {

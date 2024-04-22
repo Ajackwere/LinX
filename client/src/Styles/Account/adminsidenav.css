@@ -33,3 +33,28 @@ aside .active li {
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   background-color: white;
 }
+@media (max-width: 800px) {
+  .admin-sidenav-cnt {
+    position: fixed;
+    top: 0%;
+    left: 0%;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--overlay);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 100;
+  }
+  .adm-nav-menu-btn {
+    display: block;
+    cursor: pointer;
+    margin-right: 1rem;
+  }
+  .menu-open {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .menu-open .admin-sidenav {
+    transform: translateX(0%);
+  }
+}
