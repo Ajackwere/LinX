@@ -1,16 +1,55 @@
 :root {
   --color1: #1e1e1e;
-  --color2: #900000;
-  --color3: #ee2400;
-  --color4: #ffb09c;
-  --color5: #fbd9d3;
-  --color6: #ffefea;
+  --color2: #d5ad18;
+  --color3: #ffc900;
+  --color4: #acacac;
+  --color5: #cccccc;
+  --color6: #eaeaea;
   --overlay: #0000002a;
+}
+.load-title {
+  display: block;
+  height: 1rem;
+  width: 40%;
+  border-radius: 5px;
+  margin: 0.5rem;
+}
+.skeleton {
+  animation: loading-skeleton 1s linear infinite alternate;
+}
+@keyframes loading-skeleton {
+  0% {
+    background-color: #9a9898;
+  }
+  100% {
+    background-color: rgb(220, 219, 219);
+  }
+}
+
+.bc-read-more-load {
+  width: 3.5rem;
+  height: 1.5rem;
+  border-radius: 1rem;
+}
+.load-p {
+  display: block;
+  height: 1rem;
+  border-radius: 5px;
+}
+.bc-like-load {
+  display: flex;
+  gap: 0.5rem;
+}
+.bc-like-load div {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
 }
 .blog-card {
   width: 95vw;
   max-width: 700px;
-  border: solid 1px var(--color5);
+  /*  min-height: 200px; */
+  border: solid 1px var(--color3);
   position: relative;
   margin: 0 auto;
   margin-bottom: 1rem;
@@ -24,7 +63,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-top: solid 1px var(--color5);
+  border-top: solid 1px var(--color3);
   padding: 0.3rem 0.5rem;
 }
 .bc-footer-actions {
@@ -53,7 +92,7 @@
 }
 .bc-read-more {
   border-radius: 0.8rem;
-  background-color: var(--color4);
+  background-color: var(--color3);
   padding: 1px 4px;
   color: white;
   cursor: pointer;

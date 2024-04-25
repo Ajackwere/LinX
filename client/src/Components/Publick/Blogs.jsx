@@ -1,10 +1,13 @@
 import React, { useContext, useReducer, useRef, useState } from "react";
 import { CONT } from "../../context/AppContext";
+import { baseUrl } from "../../../baseUrl";
+import { useQuery } from "react-query";
+import axios from "axios";
 
 function Blogs() {
   const vl = useContext(CONT);
   const blogCOntentRef = useRef(null);
-  const [blogs, setBlogs] = useState([
+  /*   const [blogs, setBlogs] = useState([
     {
       id: 1,
       title: "first blog",
@@ -27,7 +30,16 @@ function Blogs() {
       dis_liked: false,
       saved: false,
     },
-  ]);
+  ]); */
+
+  const blogs = useQuery("blogs", async () => {
+    const response = await axios.get(`${baseUrl}/blogs`, {
+      headers: {
+        Authorization: `Bearer ${vl.token}`,
+      },
+    });
+    return response.data;
+  });
 
   const Comment = ({ commentData }) => {
     const { username, profile, comment, liked, dis_liked, likes } = commentData;
@@ -235,9 +247,42 @@ function Blogs() {
 
   return (
     <div className="blogs-cnt">
-      {blogs.map((blog) => {
-        return <Blog blogData={blog} key={blog.id + blog.title} />;
-      })}
+      {blogs.data
+        ? blogs.data.map((blog) => {
+            return <Blog blogData={blog} key={blog.id + blog.title} />;
+          })
+        : Array(5)
+            .fill(2)
+            .map(() => (
+              <div
+                className="blog-card"
+                style={{ border: "solid 1px #9a9898" }}
+              >
+                <span className="load-title skeleton"></span>
+                <div className="blog-content">
+                  <p className="load-p skeleton"></p>
+                  <p className="load-p skeleton"></p>
+                  <p className="load-p skeleton"></p>
+                  <p className="load-p skeleton"></p>
+                </div>
+                <div className="bc-footer">
+                  <div className="bc-footer-actions">
+                    <div className="bc-like-load">
+                      <div className="skeleton"></div>
+                      <div className="skeleton"></div>
+                      <div className="skeleton"></div>
+                    </div>
+                    <div className="bc-comment"></div>
+                    <div className="bc-read-more-load skeleton"></div>
+                  </div>
+                  <div>
+                    <span title="Save" className="material-symbols-outlined">
+                      bookmark
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
     </div>
   );
 }
