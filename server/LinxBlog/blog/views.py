@@ -108,6 +108,14 @@ class BlogViewSet(viewsets.ModelViewSet):
     queryset = Blog.objects.all()
     serializer_class = BlogSerializer
 
+    def create(self, request, *args, **kwargs):
+        author = request.user  # This assumes the author is the logged in user
+
+        request.data['author'] = author.id
+        
+        return super().create(request, *args, **kwargs)
+    
+
 
 @api_view(['GET'])
 def total_signed_users(request):
