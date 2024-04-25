@@ -9,6 +9,7 @@ import Posts from "./Admin/Posts";
 import ADs from "./Admin/ADs";
 import Authors from "./Admin/Authors";
 import NewPost from "./Admin/NewPost";
+import NewAd from "./Admin/NewAd";
 
 function Main() {
   const routes = createBrowserRouter(
@@ -20,6 +21,7 @@ function Main() {
           <Route path="posts" element={<Posts />} />
           <Route path="posts/new_post" element={<NewPost />} />
           <Route path="ADs" element={<ADs />} />
+          <Route path="ADs/new_ad" element={<NewAd />} />
           <Route path="authors" element={<Authors />} />
         </Route>
       </Route>

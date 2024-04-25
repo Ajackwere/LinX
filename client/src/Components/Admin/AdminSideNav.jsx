@@ -57,7 +57,12 @@ function AdminSideNav() {
                 <span className="material-symbols-outlined">post</span> Posts
               </li>
             </NavLink>
-            <NavLink to="/admin/ADs">
+            <NavLink
+              to="/admin/ADs"
+              onClick={() =>
+                vl.setPath([{ title: "AD's", path: "/admin/ADs" }])
+              }
+            >
               <li>
                 <span className="material-symbols-outlined">ad</span> AD's
               </li>
