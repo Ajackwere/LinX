@@ -71,7 +71,7 @@ class LoginLogoutLog(models.Model):
         verbose_name_plural = "Login Logout Logs"
 class Ad(models.Model):
     title = models.CharField(max_length=100)
-    company = models.CharField(max_length=50)
+    company = models.CharField(max_length=50, default='Linx')
     body = models.TextField()  # JSON payload as string
     from_date = models.DateTimeField()
     to_date = models.DateTimeField()
