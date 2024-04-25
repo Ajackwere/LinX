@@ -3,10 +3,15 @@ import { createContext, useEffect, useState } from "react";
 const CONT = createContext(null);
 function Context({ children }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [path, setPath] = useState([
+    { title: "Dashboard", path: "/admin/dashboard" },
+  ]);
   const functions = {
     formatCurrencyKE,
     menuOpen,
     setMenuOpen,
+    path,
+    setPath,
   };
 
   function formatCurrencyKE(number) {

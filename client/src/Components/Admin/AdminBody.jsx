@@ -1,6 +1,8 @@
 import React, { useContext, useEffect } from "react";
 import "../../Styles/Account/adminbody.css";
 import { CONT } from "../../context/AppContext";
+import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
 
 function AdminBody({ Outlet }) {
   const vl = useContext(CONT);
@@ -28,7 +30,15 @@ function AdminBody({ Outlet }) {
           >
             menu
           </span>
-          <span className="material-symbols-outlined">home</span>/ Dashboard
+          <span className="material-symbols-outlined">home</span>
+          {vl.path.map((path, i) => (
+            <Link
+              to={path.path}
+              onClick={() => vl.setPath(vl.path.slice(0, i + 1))}
+            >
+              / {path.title}
+            </Link>
+          ))}
         </div>
         <div className="amn-sec">
           Welcome

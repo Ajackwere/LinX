@@ -5,6 +5,10 @@ import StateCheker from "./StateCheker";
 import MainApp from "./Publick/MainApp";
 import AdminCnt from "./Admin/AdminCnt";
 import DashBoard from "./Admin/DashBoard";
+import Posts from "./Admin/Posts";
+import ADs from "./Admin/ADs";
+import Authors from "./Admin/Authors";
+import NewPost from "./Admin/NewPost";
 
 function Main() {
   const routes = createBrowserRouter(
@@ -12,7 +16,11 @@ function Main() {
       <Route path="/" element={<StateCheker />}>
         <Route path="/" element={<MainApp />}></Route>
         <Route path="/admin" element={<AdminCnt />}>
-          <Route path="/admin" element={<DashBoard />} />
+          <Route path="dashboard" element={<DashBoard />} />
+          <Route path="posts" element={<Posts />} />
+          <Route path="posts/new_post" element={<NewPost />} />
+          <Route path="ADs" element={<ADs />} />
+          <Route path="authors" element={<Authors />} />
         </Route>
       </Route>
     )

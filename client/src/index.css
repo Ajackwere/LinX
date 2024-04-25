@@ -56,3 +56,141 @@ body {
   border-left: solid 1px gray;
   cursor: pointer;
 }
+.data-table-cnt {
+  position: relative;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+.acc-crd {
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+}
+.data-table-head {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 1rem;
+  align-items: center;
+  gap: 1rem;
+}
+.table-data-count {
+  font-size: 1.2rem;
+  padding: 0 0.2rem;
+  outline: solid 2px gray;
+  border-radius: 3px;
+  height: fit-content;
+}
+.table-search-m {
+  display: flex;
+  align-items: center;
+  border-radius: 0.5rem;
+  border: solid 1px gray;
+  width: fit-content;
+  padding: 0.3rem;
+}
+.table-search-m input {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  font-size: 1.1rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 0.5rem;
+  color: var(--color1);
+  position: relative;
+}
+
+thead {
+  border-top-right-radius: 0.5rem;
+  border-top-left-radius: 0.5rem;
+  font-weight: 300;
+  height: 50px; /* Set a specific height for the header */
+}
+
+thead th {
+  width: max-content;
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+tbody {
+  max-height: 70vh;
+}
+tbody tr td {
+  position: relative;
+  width: max-content;
+}
+.row-pin {
+  position: absolute;
+  top: 50%;
+  left: 0.5rem;
+  transform: translateY(-50%);
+  z-index: 1;
+  cursor: pointer;
+  display: none;
+}
+tbody tr:hover .row-pin {
+  display: block;
+}
+.row-mamber-blocked {
+  position: absolute;
+  top: 50%;
+  right: 0.5rem;
+  transform: translateY(-50%);
+}
+td {
+  border-top: 1px solid rgb(157, 157, 157);
+  padding: 3px 8px;
+  text-align: center;
+  min-width: 100px;
+}
+td {
+  padding: 10px;
+}
+td input {
+  padding: 0.5rem;
+  cursor: pointer;
+}
+.td-profile {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  margin: 0.3rem;
+  background-color: rgb(194, 192, 192);
+  margin: 0 auto;
+}
+.td-profile img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.td-logo {
+  width: 10rem;
+  height: 2.5rem;
+  margin: 0 auto;
+}
+.td-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+tr {
+  transition: all 0.1s ease-in-out;
+}
+table td:nth-child(1) {
+  /* Your styling here */
+  font-weight: bold;
+  width: 5rem;
+}
+th {
+  background-color: rgba(0, 255, 255, 0.129);
+}
+
+tr:hover {
+  background-color: rgba(239, 239, 239, 0.443);
+}

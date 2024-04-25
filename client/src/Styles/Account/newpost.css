@@ -1,0 +1,24 @@
+.newpost-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+.newpost-head input {
+  font-size: 2rem;
+  background-color: transparent;
+  border: none;
+  border-bottom: solid 1px blue;
+  width: 80%;
+  display: block;
+  outline: none;
+  margin-bottom: 0.3rem;
+}
+.newpost-head button {
+  background-color: rgb(99, 99, 248);
+  color: white;
+  border: none;
+  border-radius: 1rem;
+  font-size: 1.1rem;
+  padding: 5px 10px;
+}

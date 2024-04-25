@@ -24,6 +24,10 @@
   align-items: center;
   gap: 0.5rem;
 }
+.amn-sec a {
+  color: black;
+  text-decoration: none;
+}
 .adm-nav-menu-btn {
   display: none;
 }
