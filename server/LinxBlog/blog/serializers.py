@@ -1,7 +1,12 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import UserProfile, Category, Tag, Blog, Comment
+from .models import Ad
 
+class AdSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ad
+        fields = '__all__'
 class UserSerializer(serializers.ModelSerializer):
     password1 = serializers.CharField(write_only=True)
     password2 = serializers.CharField(write_only=True)

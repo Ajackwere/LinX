@@ -3,10 +3,10 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .forms import UserProfileForm
-from .models import UserProfile, Tag, Category, Blog, Comment, User, LoginLogoutLog
+from .models import UserProfile, Tag, Category, Blog, Comment, User, LoginLogoutLog, Ad
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from .serializers import UserProfileSerializer, CategorySerializer, TagSerializer, CommentSerializer, BlogSerializer, UserSerializer
+from .serializers import UserProfileSerializer, CategorySerializer, TagSerializer, CommentSerializer, BlogSerializer, UserSerializer, AdSerializer
 from rest_framework.decorators import action, api_view
 from django.contrib.auth.models import User
 from drf_yasg.utils import swagger_auto_schema
@@ -149,3 +149,32 @@ def list_of_authors(request):
     authors = User.objects.filter(blog__isnull=False).distinct()
     serializer = UserSerializer(authors, many=True)
     return Response(serializer.data)
+
+class AdViewSet(viewsets.ModelViewSet):
+    queryset = Ad.objects.all()
+    serializer_class = AdSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def partial_update(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        return self.update(request, *args, **kwargs)
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+    

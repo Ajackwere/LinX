@@ -5,7 +5,7 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework import permissions
 from rest_framework.routers import DefaultRouter
-from blog.views import UserProfileViewSet, CategoryViewSet, TagViewSet, CommentViewSet, BlogViewSet, index, UserViewSet, total_signed_users, total_users_logged_in_today, total_posts, total_authors, list_of_posts, list_of_authors
+from blog.views import UserProfileViewSet, CategoryViewSet, TagViewSet, CommentViewSet, BlogViewSet, index, UserViewSet, total_signed_users, total_users_logged_in_today, total_posts, total_authors, list_of_posts, list_of_authors, AdViewSet
 
 
 schema_view = get_schema_view(
@@ -28,6 +28,8 @@ router.register(r'tags', TagViewSet, basename='tag')
 router.register(r'comments', CommentViewSet, basename='comment')
 router.register(r'blogs', BlogViewSet, basename='blog')
 router.register(r'users', UserViewSet, basename='user')
+router.register(r'ads', AdViewSet, basename='ad')
+
 
 urlpatterns = [
     path('', include(router.urls)),

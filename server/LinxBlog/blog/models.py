@@ -69,4 +69,15 @@ class LoginLogoutLog(models.Model):
 
     class Meta:
         verbose_name_plural = "Login Logout Logs"
-        
+class Ad(models.Model):
+    title = models.CharField(max_length=100)
+    body = models.TextField()  # JSON payload as string
+    from_date = models.DateTimeField()
+    to_date = models.DateTimeField()
+    budget = models.IntegerField()
+    clicks = models.PositiveIntegerField(default=0)
+    image = models.ImageField(upload_to='ad_images/', blank=True, null=True)
+
+    def __str__(self):
+        return self.title
+     
