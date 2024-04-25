@@ -3,14 +3,17 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .forms import UserProfileForm
-from .models import UserProfile, Tag, Category, Blog, Comment
+from .models import UserProfile, Tag, Category, Blog, Comment, User, LoginLogoutLog
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from .serializers import UserProfileSerializer, CategorySerializer, TagSerializer, CommentSerializer, BlogSerializer, UserSerializer
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view
 from django.contrib.auth.models import User
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+from django.db.models import Count
+from django.utils import timezone
+
 
 
 def index(request):
@@ -104,3 +107,37 @@ class CommentViewSet(viewsets.ModelViewSet):
 class BlogViewSet(viewsets.ModelViewSet):
     queryset = Blog.objects.all()
     serializer_class = BlogSerializer
+
+
+@api_view(['GET'])
+def total_signed_users(request):
+    total_users = User.objects.count()
+    return Response({'total_signed_users': total_users})
+
+@api_view(['GET'])
+def total_users_logged_in_today(request):
+    today = timezone.now().date()
+    total_logged_in_users = LoginLogoutLog.objects.filter(timestamp__date=today).values('user').distinct().count()
+    return Response({'total_logged_in_users_today': total_logged_in_users})
+
+@api_view(['GET'])
+def total_posts(request):
+    total_posts = Blog.objects.count()
+    return Response({'total_posts': total_posts})
+
+@api_view(['GET'])
+def total_authors(request):
+    total_authors = Blog.objects.values('author').distinct().count()
+    return Response({'total_authors': total_authors})
+
+@api_view(['GET'])
+def list_of_posts(request):
+    posts = Blog.objects.all()
+    serializer = BlogSerializer(posts, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def list_of_authors(request):
+    authors = User.objects.filter(blog__isnull=False).distinct()
+    serializer = UserSerializer(authors, many=True)
+    return Response(serializer.data)

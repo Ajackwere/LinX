@@ -5,7 +5,8 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework import permissions
 from rest_framework.routers import DefaultRouter
-from blog.views import UserProfileViewSet, CategoryViewSet, TagViewSet, CommentViewSet, BlogViewSet, index, UserViewSet
+from blog.views import UserProfileViewSet, CategoryViewSet, TagViewSet, CommentViewSet, BlogViewSet, index, UserViewSet, total_signed_users, total_users_logged_in_today, total_posts, total_authors, list_of_posts, list_of_authors
+
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -30,7 +31,15 @@ router.register(r'users', UserViewSet, basename='user')
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path('swagger.json', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    path('total-signed-users/', total_signed_users, name='total_signed_users'),
+    path('total-users-logged-in-today/', total_users_logged_in_today, name='total_users_logged_in_today'),
+    path('total-posts/', total_posts, name='total_posts'),
+    path('total-authors/', total_authors, name='total_authors'),
+    path('list-of-posts/', list_of_posts, name='list_of_posts'),
+    path('list-of-authors/', list_of_authors, name='list_of_authors'),
+    path('swagger/', schema_view.with_ui('swagger',
+         cache_timeout=0), name='schema-swagger-ui'),
+    path('swagger.json', schema_view.without_ui(
+        cache_timeout=0), name='schema-json'),
     path('admin/', admin.site.urls),
 ]
