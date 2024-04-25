@@ -1,0 +1,57 @@
+.addAuthor-cnt {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+
+  z-index: 100;
+  background-color: rgba(0, 0, 0, 0.224);
+}
+.add-author {
+  width: 90vw;
+  max-width: 550px;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  background-color: white;
+  position: relative;
+  overflow: hidden;
+  margin-top: 20vh;
+  height: fit-content;
+}
+.add-author h1 {
+  margin: 0;
+  margin-bottom: 0.5rem;
+  font-size: 1.3rem;
+}
+.add-author input {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  font-size: 1.1rem;
+  padding: 0.3rem;
+  border-bottom: solid 1px var(--color1);
+  margin: 0.5rem;
+}
+.add-author .material-symbols-outlined {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  cursor: pointer;
+}
+.add-author-footer {
+  display: flex;
+  justify-content: end;
+  margin-top: 0.3rem;
+}
+.add-author-footer button {
+  padding: 0.3rem 0.5rem;
+  border: none;
+  border-radius: 1rem;
+  background-color: rgb(156, 73, 233);
+  color: white;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
