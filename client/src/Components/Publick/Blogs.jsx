@@ -1,4 +1,10 @@
-import React, { useContext, useReducer, useRef, useState } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 import { CONT } from "../../context/AppContext";
 import { baseUrl } from "../../../baseUrl";
 import { useQuery } from "react-query";
@@ -101,18 +107,37 @@ function Blogs() {
   };
 
   const Blog = ({ blogData }) => {
-    const { title, blog_content, id, liked, dis_liked, likes } = blogData;
+    const { title, content, id, liked, dis_liked, likes } = blogData;
     const [comments, setComments] = useState(blogData.comments);
     const [isLiked, setIsLiked] = useState({ liked, dis_liked });
     const [commenting, setCommenting] = useState({ open: false, comment: "" });
     const [liekCount, setLikeCount] = useState(likes);
     const [saved, setSaved] = useState(blogData.saved);
+    const contentHeight = useRef(0);
+    const checkOverflow = () => {
+      if (blogCOntentRef.current) {
+        const contentElement = blogCOntentRef.current;
+        contentHeight.current = contentElement.scrollHeight;
+        return contentElement.clientHeight < contentElement.scrollHeight;
+      }
+      return false; // Assume no overflow initially
+    };
+    const [showReadMore, setShowReadMore] = useState(checkOverflow());
+    useEffect(() => {
+      const handleResize = () => {
+        setShowReadMore(checkOverflow());
+      };
+
+      window.addEventListener("resize", handleResize);
+
+      return () => window.removeEventListener("resize", handleResize);
+    }, []);
     return (
-      <div className="blog-card">
+      <div className="blog-card" key={id}>
         <span className="bc-title">{title}</span>
         <div
           className="blog-content"
-          dangerouslySetInnerHTML={{ __html: blog_content }}
+          dangerouslySetInnerHTML={{ __html: content }}
         ></div>
         <div className="bc-footer">
           <div className="bc-footer-actions">
@@ -163,19 +188,20 @@ function Blogs() {
               }
             >
               <span className="material-symbols-outlined">chat_bubble</span>
-              <span>{comments.length}</span>
+              <span>{comments?.length}</span>
             </div>
-            <div
-              className="bc-read-more"
-              onClick={() => {
-                const isRef = blogCOntentRef.current;
-                if (isRef && isRef.scrollWidth > isRef.clientWidth) {
-                  isRef.style.maxHeight = "100%";
-                }
-              }}
-            >
-              read more
-            </div>
+            {showReadMore && ( // Only render button if content overflows
+              <div className="bc-footer">
+                {/* ... rest of the blog footer elements ... */}
+                <div
+                  className="bc-read-more"
+                  onClick={() => setIsExpanded(!isExpanded)}
+                >
+                  {isExpanded ? "read less" : "read more"}
+                </div>
+                {/* ... rest of the blog footer elements ... */}
+              </div>
+            )}
           </div>
           <div className={saved ? "bc-liked" : ""}>
             <span
@@ -232,12 +258,13 @@ function Blogs() {
               </button>
             </form>
             <div className="bc-comments">
-              {comments.map((comment) => (
-                <Comment
-                  commentData={comment}
-                  key={comment.username + comment.id}
-                />
-              ))}
+              {comments.length > 0 ??
+                comments.map((comment) => (
+                  <Comment
+                    commentData={comment}
+                    key={comment.username + comment.id}
+                  />
+                ))}
             </div>
           </div>
         )}{" "}
@@ -265,7 +292,7 @@ function Blogs() {
                   <p className="load-p skeleton"></p>
                   <p className="load-p skeleton"></p>
                 </div>
-                <div className="bc-footer">
+                <div className="bc-footer" style={{ padding: "0.3rem" }}>
                   <div className="bc-footer-actions">
                     <div className="bc-like-load">
                       <div className="skeleton"></div>

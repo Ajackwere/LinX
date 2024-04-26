@@ -3,6 +3,9 @@ import DataTable from "../Reusables/Table";
 import { useNavigate } from "react-router";
 import "../../Styles/Account/post.css";
 import { CONT } from "../../context/AppContext";
+import { useQuery } from "react-query";
+import axios from "axios";
+import { baseUrl } from "../../../baseUrl";
 
 function Posts() {
   const [filterBy, setFilterBy] = useState("title");
@@ -20,6 +23,14 @@ function Posts() {
       dislikes: "4",
     },
   ];
+  const blogs = useQuery("blogs", async () => {
+    const response = await axios.get(`${baseUrl}/blogs`, {
+      headers: {
+        Authorization: `Bearer ${vl?.token}`,
+      },
+    });
+    return response.data;
+  });
   return (
     <section>
       <br />
@@ -61,7 +72,12 @@ function Posts() {
         <div style={{ position: "relative", height: "55vh" }}>
           <div className="f-finance-table-cnt">
             <DataTable
-              data={data}
+              data={blogs.data?.map((post) => ({
+                title: post?.title,
+                author: post?.author?.username,
+                publish_date: vl.formatTime(post?.publish_date),
+                tags: post?.tags?.map((tag) => tag.name),
+              }))}
               filterQuery={searchQuery}
               filterBy={filterBy}
               checker={true}

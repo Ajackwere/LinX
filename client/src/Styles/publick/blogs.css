@@ -130,9 +130,9 @@
 .bc-write-comment .material-symbols-outlined {
   cursor: pointer;
 }
-.bc-comment {
+/* .bc-comment {
   padding: 0.5rem;
-}
+} */
 .bc-c-head {
   display: flex;
   gap: 0.5rem;

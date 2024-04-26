@@ -8,6 +8,7 @@ function Context({ children }) {
   ]);
   const functions = {
     formatCurrencyKE,
+    formatTime,
     menuOpen,
     setMenuOpen,
     path,
@@ -25,6 +26,25 @@ function Context({ children }) {
     });
 
     return formatter.format(amount);
+  }
+
+  function formatTime(timeString) {
+    try {
+      // Parse the time string as a Date object
+      const dateObj = new Date(timeString);
+
+      // Format the date object to dd/mm/yyyy using the toLocaleDateString() method
+      const formattedTime = dateObj.toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      });
+
+      return formattedTime;
+    } catch (error) {
+      console.error("Error formatting time:", error);
+      return null; // Or any default value you prefer for invalid timestamps
+    }
   }
 
   return <CONT.Provider value={functions}>{children}</CONT.Provider>;
