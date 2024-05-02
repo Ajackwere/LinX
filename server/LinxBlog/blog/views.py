@@ -120,12 +120,13 @@ class BlogViewSet(viewsets.ModelViewSet):
     serializer_class = BlogSerializer
 
     def create(self, request, *args, **kwargs):
-        author = request.user  # This assumes the author is the logged in user
+        user_profile = request.user.userprofile
 
-        request.data['author'] = author.id
-        
-        return super().create(request, *args, **kwargs)
-    
+        if user_profile.is_author:
+            request.data['author'] = request.user.id
+            return super().create(request, *args, **kwargs)
+        else:
+            return Response({'error': 'User is not authorized to create a blog.'}, status=status.HTTP_403_FORBIDDEN)
 
 
 @api_view(['GET'])
