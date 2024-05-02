@@ -137,7 +137,7 @@ def total_signed_users(request):
 @api_view(['GET'])
 def total_users_logged_in_today(request):
     today = timezone.now().date()
-    total_logged_in_users = LoginLogoutLog.objects.filter(timestamp__date=today).values('user').distinct().count()
+    total_logged_in_users = LoginLogoutLog.objects.filter(login_time__date=today).values('user').distinct().count()
     return Response({'total_logged_in_users_today': total_logged_in_users})
 
 @api_view(['GET'])
