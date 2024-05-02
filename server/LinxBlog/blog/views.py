@@ -159,7 +159,7 @@ def list_of_posts(request):
 @api_view(['GET'])
 def list_of_authors(request):
     authors = UserProfile.objects.filter(is_author=True)
-    serializer = UserSerializer(authors, many=True)
+    serializer = UserProfileSerializer(authors, many=True)
     return Response(serializer.data)
 
 class AdViewSet(viewsets.ModelViewSet):
