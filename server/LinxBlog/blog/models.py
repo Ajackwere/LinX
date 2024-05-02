@@ -13,6 +13,7 @@ class Category(models.Model):
         self.slug = self.name.lower().replace(' ', '-')
         super(Category, self).save(*args, **kwargs)
 
+
 class Tag(models.Model):
     name = models.CharField(max_length=50, unique=True)
     slug = models.SlugField(max_length=100, unique=True, blank=True)
@@ -24,19 +25,21 @@ class Tag(models.Model):
         self.slug = self.name.lower().replace(' ', '-')
         super(Tag, self).save(*args, **kwargs)
 
+
 class Blog(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     publish_date = models.DateTimeField(auto_now_add=True)
 
-    slug = models.SlugField(max_length=100, unique=True, blank=True) 
+    slug = models.SlugField(max_length=100, unique=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True, null=True)
     tags = models.ManyToManyField(Tag, blank=True)
     image = models.ImageField(upload_to='blog_images/', blank=True, null=True)
 
     def __str__(self):
         return self.title
+
 
 class Comment(models.Model):
     content = models.TextField()
@@ -49,16 +52,19 @@ class Comment(models.Model):
     def __str__(self):
         return f"{self.content[:25]}..."
 
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
     bio = models.TextField(blank=True)
     website = models.URLField(blank=True)
     location = models.CharField(max_length=100, blank=True)
-    
+    is_author = models.BooleanField(default=False)  # Added field for author status
 
     def __str__(self):
         return self.user.username
+
+
 class LoginLogoutLog(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     login_time = models.DateTimeField(auto_now_add=True)
@@ -69,6 +75,8 @@ class LoginLogoutLog(models.Model):
 
     class Meta:
         verbose_name_plural = "Login Logout Logs"
+
+
 class Ad(models.Model):
     title = models.CharField(max_length=100)
     company = models.CharField(max_length=50, default='Linx')
@@ -81,4 +89,3 @@ class Ad(models.Model):
 
     def __str__(self):
         return self.title
-     

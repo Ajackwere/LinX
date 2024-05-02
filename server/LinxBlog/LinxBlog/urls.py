@@ -5,7 +5,7 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework import permissions
 from rest_framework.routers import DefaultRouter
-from blog.views import UserProfileViewSet, CategoryViewSet, TagViewSet, CommentViewSet, BlogViewSet, index, UserViewSet, total_signed_users, total_users_logged_in_today, total_posts, total_authors, list_of_posts, list_of_authors, AdViewSet
+from blog.views import UserProfileViewSet, CategoryViewSet, TagViewSet, CommentViewSet, BlogViewSet, index, UserViewSet, total_signed_users, total_users_logged_in_today, total_posts, total_authors, list_of_posts, list_of_authors, AdViewSet, author_details
 
 
 schema_view = get_schema_view(
@@ -39,6 +39,7 @@ urlpatterns = [
     path('total-authors/', total_authors, name='total_authors'),
     path('list-of-posts/', list_of_posts, name='list_of_posts'),
     path('list-of-authors/', list_of_authors, name='list_of_authors'),
+    path('author-details/<int:author_id>/', author_details, name='author_details'),
     path('swagger/', schema_view.with_ui('swagger',
          cache_timeout=0), name='schema-swagger-ui'),
     path('swagger.json', schema_view.without_ui(

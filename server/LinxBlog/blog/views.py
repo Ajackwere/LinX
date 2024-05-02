@@ -11,7 +11,7 @@ from rest_framework.decorators import action, api_view
 from django.contrib.auth.models import User
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
-from django.db.models import Count
+from django.db.models import Sum
 from django.utils import timezone
 
 
@@ -68,6 +68,17 @@ class UserViewSet(viewsets.ViewSet):
         logout(request)
         return Response(status=status.HTTP_200_OK)
     
+    @action(detail=False, methods=['POST'])
+    def make_author(self, request):
+        username = request.data.get('username')
+        user = User.objects.get(username=username)
+        if user:
+            user.userprofile.is_author = True
+            user.userprofile.save()
+            return Response({'message': 'User is now an author.'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'error_message': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
+
 class UserProfileViewSet(viewsets.ModelViewSet):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
@@ -135,7 +146,7 @@ def total_posts(request):
 
 @api_view(['GET'])
 def total_authors(request):
-    total_authors = Blog.objects.values('author').distinct().count()
+    total_authors = UserProfile.objects.filter(is_author=True).count()
     return Response({'total_authors': total_authors})
 
 @api_view(['GET'])
@@ -146,7 +157,7 @@ def list_of_posts(request):
 
 @api_view(['GET'])
 def list_of_authors(request):
-    authors = User.objects.filter(blog__isnull=False).distinct()
+    authors = UserProfile.objects.filter(is_author=True)
     serializer = UserSerializer(authors, many=True)
     return Response(serializer.data)
 
@@ -177,4 +188,25 @@ class AdViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
-    
+
+@api_view(['GET'])
+def author_details(request, author_id):
+    try:
+        author = User.objects.get(id=author_id)
+    except User.DoesNotExist:
+        return Response({'error_message': 'Author not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+    total_blogs = Blog.objects.filter(author=author).count()
+    total_likes = Comment.objects.filter(blog__author=author).aggregate(total_likes=Sum('likes'))['total_likes']
+    first_name = author.first_name
+    last_name = author.last_name
+    email = author.email
+
+    data = {
+        'total_blogs': total_blogs,
+        'total_likes': total_likes,
+        'first_name': first_name,
+        'last_name': last_name,
+        'email': email
+    }
+    return Response(data)
