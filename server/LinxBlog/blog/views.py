@@ -140,10 +140,9 @@ class BlogViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
 
-        comments = Comment.objects.filter(blog=instance)
-        comments_serializer = CommentSerializer(comments, many=True)
+        comments_count = Comment.objects.filter(blog=instance).count()
         data = serializer.data
-        data['comments'] = comments_serializer.data
+        data['comments_count'] = comments_count
         return Response(data)
     
 
