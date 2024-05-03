@@ -45,7 +45,7 @@ class Comment(models.Model):
     content = models.TextField()
     likes = models.PositiveIntegerField(default=0)  # Store like count directly
     dislikes = models.PositiveIntegerField(default=0)  # Store dislike count directly
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    person = models.ForeignKey(User, on_delete=models.CASCADE)
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
     created_date = models.DateTimeField(auto_now_add=True)
 

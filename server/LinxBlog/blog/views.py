@@ -120,6 +120,17 @@ class BlogViewSet(viewsets.ModelViewSet):
     serializer_class = BlogSerializer
     permission_classes = [IsAuthenticated]
 
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+
+        comments = Comment.objects.filter(blog=instance)
+        comments_serializer = CommentSerializer(comments, many=True)
+        data = serializer.data
+        data['comments'] = comments_serializer.data
+        return Response(data)
+    
+
     def create(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return Response({'error': 'User is not authenticated.'}, status=status.HTTP_401_UNAUTHORIZED)
