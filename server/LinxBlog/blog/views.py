@@ -13,8 +13,9 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from django.db.models import Sum
 from django.utils import timezone
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.exceptions import PermissionDenied
+
 
 def index(request):
     return Response("Welcome to LinX blogsite server. Navigate to /swagger to see the documentation")
@@ -133,7 +134,7 @@ class CommentViewSet(viewsets.ModelViewSet):
 class BlogViewSet(viewsets.ModelViewSet):
     queryset = Blog.objects.all()
     serializer_class = BlogSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly] 
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
