@@ -40,10 +40,13 @@ class TagSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class CommentSerializer(serializers.ModelSerializer):
+    likes = serializers.ReadOnlyField()
+    dislikes = serializers.ReadOnlyField()
 
     class Meta:
         model = Comment
-        fields = ['content', 'person', 'blog']
+        fields = ['content', 'person', 'likes', 'dislikes', 'blog']
+        read_only_fields = ['likes', 'dislikes']
 
 class BlogSerializer(serializers.ModelSerializer):
     category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), required=False)
