@@ -2,7 +2,9 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import UserProfile, Category, Tag, Blog, Comment
 from .models import Ad
+from django.utils.text import slugify
 
+    
 class AdSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ad
@@ -44,16 +46,32 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class BlogSerializer(serializers.ModelSerializer):
-    
-    category = CategorySerializer(read_only=True)
-    tags = TagSerializer(many=True, read_only=True) 
-    author = UserSerializer(read_only=True)
+    category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), required=False)
+    tags = serializers.PrimaryKeyRelatedField(many=True, queryset=Tag.objects.all(), required=False)
 
     class Meta:
         model = Blog
-        fields = ['id', 'title', 'content', 'author', 'publish_date', 'category', 'tags', 'image']
-        
+        fields = ['id', 'title', 'content', 'author', 'publish_date', 'category', 'tags', 'image', 'slug']
+        read_only_fields = ['author']
 
+    def create(self, validated_data):
+        validated_data['author'] = self.context['request'].user
+        title = validated_data['title']
+        slug = slugify(title)
+        validated_data['slug'] = slug
+
+        category_data = validated_data.pop('category', None)
+        tags_data = validated_data.pop('tags', [])
+
+        if category_data:
+            validated_data['category'] = category_data
+
+        blog = super().create(validated_data)
+
+        blog.tags.set(tags_data)
+
+        return blog
+    
 class UserProfileSerializer(serializers.ModelSerializer):
 
     username = serializers.CharField(source='user.username', read_only=True)

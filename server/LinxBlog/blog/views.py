@@ -13,8 +13,8 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from django.db.models import Sum
 from django.utils import timezone
-
-
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.exceptions import PermissionDenied
 
 def index(request):
     return Response("Welcome to LinX blogsite server. Navigate to /swagger to see the documentation")
@@ -118,17 +118,20 @@ class CommentViewSet(viewsets.ModelViewSet):
 class BlogViewSet(viewsets.ModelViewSet):
     queryset = Blog.objects.all()
     serializer_class = BlogSerializer
+    permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return Response({'error': 'User is not authenticated.'}, status=status.HTTP_401_UNAUTHORIZED)
+
         user_profile = request.user.userprofile
 
         if user_profile.is_author:
-            request.data['author'] = request.user.id
+            request.data['author_id'] = request.user.id
             return super().create(request, *args, **kwargs)
         else:
-            return Response({'error': 'User is not authorized to create a blog.'}, status=status.HTTP_403_FORBIDDEN)
-
-
+            raise PermissionDenied(detail='User is not authorized to create a blog.')
+        
 @api_view(['GET'])
 def total_signed_users(request):
     total_users = User.objects.count()
