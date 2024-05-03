@@ -113,6 +113,21 @@ class TagViewSet(viewsets.ModelViewSet):
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+    
+    @action(detail=True, methods=['POST'])
+    def like_comment(self, request, pk=None):
+        comment = self.get_object()
+        comment.likes += 1
+        comment.save()
+        return Response({'message': 'Comment liked successfully'})
+
+    @action(detail=True, methods=['POST'])
+    def dislike_comment(self, request, pk=None):
+        comment = self.get_object()
+        comment.dislikes += 1
+        comment.save()
+        return Response({'message': 'Comment disliked successfully'})
+    
 
 
 class BlogViewSet(viewsets.ModelViewSet):
