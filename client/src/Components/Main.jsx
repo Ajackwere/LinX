@@ -10,6 +10,7 @@ import ADs from "./Admin/ADs";
 import Authors from "./Admin/Authors";
 import NewPost from "./Admin/NewPost";
 import NewAd from "./Admin/NewAd";
+import "react-toastify/dist/ReactToastify.css";
 
 function Main() {
   const routes = createBrowserRouter(

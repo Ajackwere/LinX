@@ -24,6 +24,7 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 0 0.5rem;
 }
 .nav-logo {
   width: 10rem;
@@ -152,6 +153,79 @@ nav ul li {
 .nav-c2 {
   display: none;
 }
+.log-btns {
+  display: flex;
+  gap: 0.5rem;
+}
+.log-btns button {
+  padding: 0.3rem 0.5rem;
+  font-size: 1rem;
+  border-radius: 1rem;
+  border: solid 1px black;
+  cursor: pointer;
+}
+.log-singup {
+  background-color: black;
+  color: white;
+}
+.log-form-cnt {
+  top: 0%;
+  left: 0%;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  background-color: var(--overlay);
+  z-index: 110;
+  display: flex;
+  justify-content: center;
+}
+.log-form-cnt form {
+  position: relative;
+  margin: 10vh;
+  background-color: white;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  height: fit-content;
+  width: 90%;
+  max-width: 400px;
+  border: solid 1px var(--color2);
+}
+.close-log-form {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  cursor: pointer;
+}
+.log-form-head {
+  font-size: 1.4rem;
+  font-weight: 500;
+  margin-bottom: 0.3rem;
+}
+.log-form-imp input {
+  display: block;
+  margin: 0.5rem 0;
+  width: 100%;
+  font-size: 1.1rem;
+  border-radius: 5px;
+  border: solid 1px black;
+  padding: 5px;
+}
+.log-submit-btn {
+  display: block;
+  width: 100%;
+  padding: 0.5rem;
+  background-color: blue;
+  border: none;
+  border-radius: 0.3rem;
+  color: white;
+  font-weight: 400;
+  font-size: 1.1rem;
+  margin-top: 0.5rem;
+  position: relative;
+  min-height: 2rem;
+  cursor: pointer;
+}
+
 @media (max-width: 1100px) {
   .nav-c1 {
     display: none;

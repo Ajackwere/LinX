@@ -26,8 +26,7 @@ function Blogs() {
 
   const Comment = ({ commentData }) => {
     const { username, profile, content, liked, dislikes, likes } = commentData;
-    const [isLiked, setIsLiked] = useState({ liked, dislikes });
-    const [commenting, setCommenting] = useState({ open: false, comment: "" });
+    const [isLiked, setIsLiked] = useState({ liked: false, dislikes: false });
     const [liekCount, setLikeCount] = useState(likes);
     return (
       <div className="bc-comment">
@@ -94,6 +93,7 @@ function Blogs() {
       comments_count = 0,
     } = blogData;
     const [comments, setComments] = useState(blogData.comments);
+    const [commentCount, setCommentCount] = useState(comments_count);
     const [isLiked, setIsLiked] = useState({ liked, dis_liked });
     const [commenting, setCommenting] = useState({ open: false, comment: "" });
     const [liekCount, setLikeCount] = useState(likes);
@@ -119,7 +119,7 @@ function Blogs() {
     }, []);
 
     const getComments = useMutation(
-      async (isExpanded) => {
+      async () => {
         const response = await axios.get(`${baseUrl}/comments/?blog=${id}`);
         return response.data;
       },
@@ -132,12 +132,25 @@ function Blogs() {
         },
       }
     );
-
+    const postComment = useMutation(
+      async (data) => {
+        const response = await axios.post(`${baseUrl}/comments/`, data);
+        return response.data;
+      },
+      {
+        onSuccess: (data) => {},
+        onError: (error) => {
+          console.error(`Error fetching comments, ${error}`);
+          setComments((prev) => prev.pop());
+          setCommentCount((prev) => prev - 1);
+        },
+      }
+    );
     useEffect(() => {
       if (commenting.open) {
         getComments.mutate(id);
       }
-    }, [commenting]);
+    }, [commenting.open]);
 
     return (
       <div className="blog-card" key={id}>
@@ -195,7 +208,7 @@ function Blogs() {
               }
             >
               <span className="material-symbols-outlined">chat_bubble</span>
-              <span>{comments_count}</span>
+              <span>{commentCount}</span>
             </div>
             {showReadMore && ( // Only render button if content overflows
               <div className="bc-footer">
@@ -230,16 +243,20 @@ function Blogs() {
                 setComments((prev) => [
                   ...prev,
                   {
-                    id: Math.random() / 100,
-                    username: "commentor name",
-                    liked: false,
-                    dis_liked: false,
-                    likes: 24,
-                    profile: "",
-                    comment: commenting.comment,
+                    content: commenting.comment,
+                    person: 1,
+                    likes: 0,
+                    dislikes: 0,
+                    blog: id,
                   },
                 ]);
+                postComment.mutate({
+                  content: commenting.comment,
+                  person: 1,
+                  blog: id,
+                });
                 setCommenting((prev) => ({ ...prev, comment: "" }));
+                setCommentCount((prev) => prev + 1);
               }}
             >
               <div className="bc-c-profile">
@@ -264,7 +281,7 @@ function Blogs() {
                 <span className="material-symbols-outlined">send</span>
               </button>
             </form>
-            <div className="bc-comments">
+            <div className="bc-comments" style={{ padding: "1rem" }}>
               {comments?.length > 0
                 ? comments.map((comment) => (
                     <Comment
