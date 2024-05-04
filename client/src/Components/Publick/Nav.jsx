@@ -256,6 +256,9 @@ function Nav() {
               />
             </div>
           </li>
+          <div className="nav-search2">
+            <span className="material-symbols-outlined">search</span>
+          </div>
           <li>
             {vl.userIsLoged ? (
               <div className="nav-profile">
@@ -274,10 +277,6 @@ function Nav() {
             )}
           </li>
         </ul>
-
-        <div className="nav-search2">
-          <span className="material-symbols-outlined">search</span>
-        </div>
       </div>
       <div className="nav-bottom">
         {showLeftButton && (

@@ -234,3 +234,11 @@ nav ul li {
     display: block;
   }
 }
+@media (max-width: 700px) {
+  .nav-search {
+    display: none;
+  }
+  .nav-search2 {
+    display: block;
+  }
+}
