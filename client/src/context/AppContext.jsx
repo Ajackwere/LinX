@@ -3,6 +3,7 @@ import { createContext, useEffect, useState } from "react";
 const CONT = createContext(null);
 function Context({ children }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [userIsLoged, setUserIsLoged] = useState(false);
   const [path, setPath] = useState([
     { title: "Dashboard", path: "/admin/dashboard" },
   ]);
@@ -13,6 +14,8 @@ function Context({ children }) {
     setMenuOpen,
     path,
     setPath,
+    userIsLoged,
+    setUserIsLoged,
   };
 
   function formatCurrencyKE(number) {

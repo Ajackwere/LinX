@@ -7,36 +7,13 @@ import React, {
 } from "react";
 import { CONT } from "../../context/AppContext";
 import { baseUrl } from "../../../baseUrl";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import axios from "axios";
+import Loader from "../Loader";
 
 function Blogs() {
   const vl = useContext(CONT);
   const blogCOntentRef = useRef(null);
-  /*   const [blogs, setBlogs] = useState([
-    {
-      id: 1,
-      title: "first blog",
-      blog_content:
-        "<h1>this blog</h1><p> Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore necessitatibus enim animi rem nostrum expedita amet, quo iste, hic magnam a omnis dignissimos voluptatem facilis error fugiat harum  optio sed?</p> <p> Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore  necessitatibus enim animi rem nostrum expedita amet, quo iste, hic magnam a omnis dignissimos voluptatem facilis error fugiat harum </p>",
-      comments: [
-        {
-          id: 1,
-          username: "commentor name",
-          profile: "",
-          liked: false,
-          dis_liked: false,
-          likes: 24,
-          comment:
-            "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Debitis sunt a amet, labore velit est iusto maxime. Temporibus minus, in numquam non ex facere, esse eius, repellendus rem dolores fuga!",
-        },
-      ],
-      likes: 24,
-      liked: false,
-      dis_liked: false,
-      saved: false,
-    },
-  ]); */
 
   const blogs = useQuery("blogs", async () => {
     const response = await axios.get(`${baseUrl}/blogs`, {
@@ -48,8 +25,8 @@ function Blogs() {
   });
 
   const Comment = ({ commentData }) => {
-    const { username, profile, comment, liked, dis_liked, likes } = commentData;
-    const [isLiked, setIsLiked] = useState({ liked, dis_liked });
+    const { username, profile, content, liked, dislikes, likes } = commentData;
+    const [isLiked, setIsLiked] = useState({ liked, dislikes });
     const [commenting, setCommenting] = useState({ open: false, comment: "" });
     const [liekCount, setLikeCount] = useState(likes);
     return (
@@ -61,7 +38,7 @@ function Blogs() {
           <span>{username}</span>
         </div>
         <div className="bc-c-body">
-          {comment}
+          {content}
           <div className="bc-like">
             <div
               className={isLiked.liked ? "bc-like-up bc-liked" : "bc-like-up"}
@@ -74,9 +51,9 @@ function Blogs() {
                     ? setLikeCount((prev) => prev - 1)
                     : setLikeCount((prev) => prev + 1),
                     setIsLiked({
-                      dis_liked: isLiked.dis_liked
-                        ? !isLiked.dis_liked
-                        : isLiked.dis_liked,
+                      dislikes: isLiked.dislikes
+                        ? !isLiked.dislikes
+                        : isLiked.dislikes,
                       liked: !isLiked.liked,
                     });
                 }}
@@ -85,14 +62,14 @@ function Blogs() {
               </span>{" "}
               <span className="bc-l-count">{liekCount}</span>
             </div>
-            <div className={isLiked.dis_liked ? "bc-liked" : ""}>
+            <div className={isLiked.dislikes ? "bc-liked" : ""}>
               <span
                 className="material-symbols-outlined"
                 onClick={() => {
                   isLiked.liked ? setLikeCount((prev) => prev - 1) : null,
                     setIsLiked({
                       liked: isLiked.liked ? !isLiked.liked : isLiked.liked,
-                      dis_liked: !isLiked.dis_liked,
+                      dislikes: !isLiked.dislikes,
                     });
                 }}
                 style={{ cursor: "pointer" }}
@@ -107,7 +84,15 @@ function Blogs() {
   };
 
   const Blog = ({ blogData }) => {
-    const { title, content, id, liked, dis_liked, likes } = blogData;
+    const {
+      title,
+      content,
+      id,
+      liked,
+      dis_liked,
+      likes,
+      comments_count = 0,
+    } = blogData;
     const [comments, setComments] = useState(blogData.comments);
     const [isLiked, setIsLiked] = useState({ liked, dis_liked });
     const [commenting, setCommenting] = useState({ open: false, comment: "" });
@@ -132,6 +117,28 @@ function Blogs() {
 
       return () => window.removeEventListener("resize", handleResize);
     }, []);
+
+    const getComments = useMutation(
+      async (isExpanded) => {
+        const response = await axios.get(`${baseUrl}/comments/?blog=${id}`);
+        return response.data;
+      },
+      {
+        onSuccess: (data) => {
+          setComments(data);
+        },
+        onError: (error) => {
+          console.error(`Error fetching comments, ${error}`);
+        },
+      }
+    );
+
+    useEffect(() => {
+      if (commenting.open) {
+        getComments.mutate(id);
+      }
+    }, [commenting]);
+
     return (
       <div className="blog-card" key={id}>
         <span className="bc-title">{title}</span>
@@ -141,7 +148,7 @@ function Blogs() {
         ></div>
         <div className="bc-footer">
           <div className="bc-footer-actions">
-            <div className="bc-like">
+            {/* <div className="bc-like">
               <div
                 className={isLiked.liked ? "bc-like-up bc-liked" : "bc-like-up"}
               >
@@ -179,7 +186,7 @@ function Blogs() {
                   thumb_down
                 </span>
               </div>
-            </div>
+            </div> */}
             <div
               className="bc-comment"
               style={{ cursor: "pointer" }}
@@ -188,7 +195,7 @@ function Blogs() {
               }
             >
               <span className="material-symbols-outlined">chat_bubble</span>
-              <span>{comments?.length}</span>
+              <span>{comments_count}</span>
             </div>
             {showReadMore && ( // Only render button if content overflows
               <div className="bc-footer">
@@ -204,14 +211,14 @@ function Blogs() {
             )}
           </div>
           <div className={saved ? "bc-liked" : ""}>
-            <span
+            {/* <span
               title="Save"
               className="material-symbols-outlined"
               style={{ cursor: "pointer", fontSize: "1.5rem" }}
               onClick={() => setSaved((prev) => !prev)}
             >
               bookmark
-            </span>
+            </span> */}
           </div>
         </div>
         {commenting.open && (
@@ -258,13 +265,18 @@ function Blogs() {
               </button>
             </form>
             <div className="bc-comments">
-              {comments.length > 0 ??
-                comments.map((comment) => (
-                  <Comment
-                    commentData={comment}
-                    key={comment.username + comment.id}
-                  />
-                ))}
+              {comments?.length > 0
+                ? comments.map((comment) => (
+                    <Comment
+                      commentData={comment}
+                      key={comment.username + comment.id}
+                    />
+                  ))
+                : getComments.isLoading && (
+                    <div className="center-loader">
+                      <Loader />
+                    </div>
+                  )}
             </div>
           </div>
         )}{" "}

@@ -197,3 +197,8 @@ th {
 tr:hover {
   background-color: rgba(239, 239, 239, 0.443);
 }
+.center-loader {
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+}

@@ -55,9 +55,10 @@
   margin-bottom: 1rem;
 }
 .bc-title {
-  margin-top: 1rem;
-  padding: 0.5rem;
+  margin-top: 0.5rem;
+  padding: 0.3rem 0.5rem;
   font-weight: 600;
+  display: block;
 }
 .bc-footer {
   display: flex;
