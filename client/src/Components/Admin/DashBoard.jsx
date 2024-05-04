@@ -2,28 +2,48 @@ import React from "react";
 import "../../Styles/Account/dashboard.css";
 import SimpleLineChart from "../Reusables/LineChart";
 import SimpleBChart from "../Reusables/BarChart";
+import { useQuery } from "react-query";
+import axios from "axios";
+import { baseUrl } from "../../../baseUrl";
 
 function DashBoard() {
+  const signedUsers = useQuery("signedUsers", async () => {
+    const response = await axios.get(baseUrl + "/total-signed-users/");
+    return response.data;
+  });
+  const todaysUsers = useQuery("totalUsers", async () => {
+    const response = await axios.get(baseUrl + "/total-users-logged-in-today/");
+    return response.data;
+  });
+  const totalposts = useQuery("stotalPosts", async () => {
+    const response = await axios.get(baseUrl + "/total-posts/");
+    return response.data;
+  });
+  const totalAuthors = useQuery("totaAuthors", async () => {
+    const response = await axios.get(baseUrl + "/total-authors/");
+    return response.data;
+  });
+
   const topSectionCards = [
     {
       icon: "person",
       title: "Signed users",
-      count: 500,
+      count: signedUsers.data?.total_signed_users,
     },
     {
       icon: "groups",
       title: "Todays users",
-      count: 100,
+      count: todaysUsers.data?.total_logged_in_users_today,
     },
     {
       icon: "post",
       title: "Posts",
-      count: 173,
+      count: totalposts.data?.total_posts,
     },
     {
       icon: "assignment_ind",
       title: "Authors",
-      count: 15,
+      count: totalAuthors.data?.total_authors,
     },
   ];
 
@@ -101,13 +121,7 @@ function DashBoard() {
                 </div>
                 <div className="adt-count">37</div>
               </li>
-              <li>
-                <div className="adt-title">
-                  <span className="material-symbols-outlined">ads_click</span>{" "}
-                  Total Clicks
-                </div>
-                <div className="adt-count">37,000</div>
-              </li>
+
               <li>
                 <div className="adt-title">
                   <span className="material-symbols-outlined">payments</span>{" "}

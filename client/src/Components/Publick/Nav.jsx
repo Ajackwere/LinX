@@ -217,7 +217,7 @@ function Nav() {
                 <Loader />
               </div>
             ) : (
-              "Sign up"
+              "Sign in"
             )}
           </button>
         </form>
