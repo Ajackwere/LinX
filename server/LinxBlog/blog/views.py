@@ -15,6 +15,7 @@ from django.db.models import Sum
 from django.utils import timezone
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.exceptions import PermissionDenied
+from django.views.decorators.csrf import csrf_exempt
 
 
 def index(request):
@@ -53,6 +54,7 @@ class UserViewSet(viewsets.ViewSet):
             return Response(status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+    @csrf_exempt
     @action(detail=False, methods=['POST'])
     def login(self, request):
         username = request.data.get('username')
