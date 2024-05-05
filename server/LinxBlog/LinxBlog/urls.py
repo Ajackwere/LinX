@@ -34,7 +34,7 @@ router.register(r'ads', AdViewSet, basename='ad')
 urlpatterns = [
     path('', include(router.urls)),
     path('get-csrf-token/', get_csrf_token, name='get_csrf_token'),
-    path('login/', LoginView.as_view(), name='login'),
+    path('userlogin/', LoginView.as_view(), name='userlogin'),
     path('total-signed-users/', total_signed_users, name='total_signed_users'),
     path('total-users-logged-in-today/', total_users_logged_in_today, name='total_users_logged_in_today'),
     path('total-posts/', total_posts, name='total_posts'),
