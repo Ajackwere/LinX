@@ -34,6 +34,7 @@ router.register(r'ads', AdViewSet, basename='ad')
 urlpatterns = [
     path('', include(router.urls)),
     path('total-signed-users/', total_signed_users, name='total_signed_users'),
+    
     path('total-users-logged-in-today/', total_users_logged_in_today, name='total_users_logged_in_today'),
     path('total-posts/', total_posts, name='total_posts'),
     path('total-authors/', total_authors, name='total_authors'),
