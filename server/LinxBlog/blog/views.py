@@ -20,7 +20,6 @@ from django.http import JsonResponse
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication 
 from rest_framework.views import APIView
 
-
 class CsrfExemptSessionAuthentication(SessionAuthentication):
     def enforce_csrf(self, request):
         return  # Disable CSRF check
