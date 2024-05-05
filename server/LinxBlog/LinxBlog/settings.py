@@ -21,6 +21,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG=True
 ALLOWED_HOSTS = ['*']
 
+
 # if DEBUG:
 #     ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 # else:
@@ -55,6 +56,10 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+CSRF_TRUSTED_ORIGINS = []
+
+CSRF_COOKIE_SAMESITE = None
 
 ROOT_URLCONF = 'LinxBlog.urls'
 
