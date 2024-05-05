@@ -53,19 +53,7 @@ class UserViewSet(viewsets.ViewSet):
             user = User.objects.create_user(username=username, password=password)
             return Response(status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    @csrf_exempt
-    @action(detail=False, methods=['POST'])
-    def login(self, request):
-        username = request.data.get('username')
-        password = request.data.get('password')
-        user = authenticate(request, username=username, password=password)
-        if user:
-            login(request, user)
-            return Response(status=status.HTTP_200_OK)
-        else:
-            return Response({'error_message': 'Invalid username or password.'}, status=status.HTTP_400_BAD_REQUEST)
-    
+        
     @action(detail=False, methods=['POST'])
     def logout(self, request):
         logout(request)
