@@ -15,12 +15,36 @@ from django.db.models import Sum
 from django.utils import timezone
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.exceptions import PermissionDenied
-from django.views.decorators.csrf import csrf_exempt
+from django.middleware.csrf import get_token
+from django.http import JsonResponse
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication 
+from rest_framework.views import APIView
 
+
+class CsrfExemptSessionAuthentication(SessionAuthentication):
+    def enforce_csrf(self, request):
+        return  # Disable CSRF check
 
 def index(request):
     return Response("Welcome to LinX blogsite server. Navigate to /swagger to see the documentation")
 
+def get_csrf_token(request):
+    csrf_token = get_token(request)
+    return JsonResponse({'csrf_token': csrf_token})
+
+class LoginView(APIView):
+    authentication_classes = [CsrfExemptSessionAuthentication, BasicAuthentication]
+
+    def post(self, request):
+        username = request.data.get('username')
+        password = request.data.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return Response({'message': 'Login successful'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+        
 class UserViewSet(viewsets.ViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -53,7 +77,8 @@ class UserViewSet(viewsets.ViewSet):
             user = User.objects.create_user(username=username, password=password)
             return Response(status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
+    
+    
     @action(detail=False, methods=['POST'])
     def logout(self, request):
         logout(request)
