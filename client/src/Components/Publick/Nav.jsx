@@ -245,7 +245,10 @@ function Nav() {
             ))}
           </ul>
         </div>
-        <ul className="nav-center">
+        <ul
+          className="nav-center"
+          style={{ gap: "0.8rem", alignItems: "center" }}
+        >
           <li className="nav-search-li">
             <div className="nav-search">
               <span className="material-symbols-outlined">search</span>
