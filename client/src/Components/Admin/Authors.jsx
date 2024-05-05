@@ -4,6 +4,9 @@ import "../../Styles/Account/authors.css";
 import DataTable from "../Reusables/Table";
 import { useNavigate } from "react-router";
 import { CONT } from "../../context/AppContext";
+import { useQuery } from "react-query";
+import { baseUrl } from "../../../baseUrl";
+import axios from "axios";
 
 function Authors() {
   const [filterBy, setFilterBy] = useState("first_name");
@@ -21,6 +24,10 @@ function Authors() {
       total_likes: 1200,
     },
   ];
+  const authors = useQuery("totaAuthors", async () => {
+    const response = await axios.get(baseUrl + "/list-of-authors/");
+    return response.data;
+  });
 
   return (
     <section>
@@ -84,7 +91,7 @@ function Authors() {
         <div style={{ position: "relative", height: "55vh" }}>
           <div className="f-finance-table-cnt">
             <DataTable
-              data={data}
+              data={authors.data}
               filterQuery={searchQuery}
               filterBy={filterBy}
               checker={true}
