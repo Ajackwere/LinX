@@ -31,6 +31,7 @@ function Posts() {
     });
     return response.data;
   });
+
   return (
     <section>
       <br />

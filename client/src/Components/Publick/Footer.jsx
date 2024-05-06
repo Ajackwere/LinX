@@ -21,29 +21,21 @@ function Footer() {
           <div className="col-xs-6 col-md-3">
             <h6>Categories</h6>
             <ul className="footer-links">
+              , , , ,
               <li>
-                <a href="http://scanfcode.com/category/c-language/">C</a>
+                <a href="">Health</a>
               </li>
               <li>
-                <a href="http://scanfcode.com/category/front-end-development/">
-                  UI Design
-                </a>
+                <a href="">Entertainment</a>
               </li>
               <li>
-                <a href="http://scanfcode.com/category/back-end-development/">
-                  PHP
-                </a>
+                <a href="">People and Culture</a>
               </li>
               <li>
-                <a href="http://scanfcode.com/category/java-programming-language/">
-                  Java
-                </a>
+                <a href="">Lifestyle</a>
               </li>
               <li>
-                <a href="http://scanfcode.com/category/android/">Android</a>
-              </li>
-              <li>
-                <a href="http://scanfcode.com/category/templates/">Templates</a>
+                <a href="">Space & Tech</a>
               </li>
             </ul>
           </div>
@@ -52,18 +44,16 @@ function Footer() {
             <h6>Quick Links</h6>
             <ul className="footer-links">
               <li>
-                <a href="http://scanfcode.com/about/">About Us</a>
+                <a href="">About Us</a>
               </li>
               <li>
                 <a href="admin@linx-ea.com">Contact Us on admin@linx-ea.com</a>
               </li>
               <li>
-                <a href="http://scanfcode.com/privacy-policy/">
-                  Privacy Policy
-                </a>
+                <a href="">Privacy Policy</a>
               </li>
               <li>
-                <a href="http://scanfcode.com/sitemap/">Sitemap</a>
+                <a href="">Sitemap</a>
               </li>
             </ul>
           </div>

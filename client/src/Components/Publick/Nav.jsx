@@ -35,13 +35,11 @@ function Nav() {
   };
 
   const categories = [
-    "All",
-    "Sports",
-    "Health & lifestyle",
-    "Beauty & Skincare",
-    "Business",
-    "Technology",
-    "Travel",
+    "Health",
+    "Entertainment",
+    "People and Culture",
+    "Lifestyle",
+    "Space & Tech",
   ];
 
   const registerUser = useMutation(
@@ -63,7 +61,7 @@ function Nav() {
 
   const loginUser = useMutation(
     async (data) => {
-      const response = await axios.post(`${baseUrl}/users/login/`, data);
+      const response = await axios.post(`${baseUrl}/userlogin/`, data);
       return response.data;
     },
     {
@@ -168,8 +166,7 @@ function Nav() {
 
             loginUser.mutate({
               username: formData.get("email"),
-              password1: formData.get("password1"),
-              password2: formData.get("password1"),
+              password: formData.get("password"),
             });
           }}
         >
@@ -193,7 +190,7 @@ function Nav() {
             <span>Password</span>
             <input
               type="password"
-              name="password1"
+              name="password"
               placeholder="******"
               minLength={6}
               required
