@@ -172,7 +172,17 @@ class BlogViewSet(viewsets.ModelViewSet):
             return super().create(request, *args, **kwargs)
         else:
             raise PermissionDenied(detail='User is not authorized to create a blog.')
-        
+    
+    @api_view(['GET'])
+    def get_posts_by_category(request):
+        category_name = request.GET.get('category')
+        if category_name:
+            posts = Blog.objects.filter(category__name=category_name)
+            serializer = BlogSerializer(posts, many=True)
+            return Response(serializer.data)
+        else:
+            return Response({'error': 'Category parameter is required.'}, status=status.HTTP_400_BAD_REQUEST)
+           
 @api_view(['GET'])
 def total_signed_users(request):
     total_users = User.objects.count()
