@@ -158,18 +158,20 @@ nav ul li {
   display: flex;
   gap: 0.5rem;
 }
-.log-btns button {
-  padding: 0.3rem 0.5rem;
-  font-size: 1rem;
-  border-radius: 1rem;
-  border: solid 1px black;
+.log-btns span {
+  margin-right: 0.5rem;
   cursor: pointer;
-  height: fit-content;
-  min-width: 5rem;
 }
 .log-singup {
-  background-color: black;
+  min-width: 5rem;
+  height: fit-content;
+  padding: 0.3rem 0.5rem;
+  font-size: 1rem;
+  background-color: var(--color2);
+  border: none;
+  border-radius: 5px;
   color: white;
+  cursor: pointer;
 }
 .log-form-cnt {
   top: 0%;
@@ -217,7 +219,7 @@ nav ul li {
   display: block;
   width: 100%;
   padding: 0.5rem;
-  background-color: black;
+  background-color: var(--color3);
   border: none;
   border-radius: 0.3rem;
   color: white;
@@ -228,7 +230,9 @@ nav ul li {
   min-height: 2rem;
   cursor: pointer;
 }
-
+.log-submit-btn:hover {
+  background-color: var(--color2);
+}
 @media (max-width: 1100px) {
   .nav-c1 {
     display: none;

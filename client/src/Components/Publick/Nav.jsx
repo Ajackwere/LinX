@@ -37,7 +37,7 @@ function Nav() {
   const categories = [
     "Health",
     "Entertainment",
-    "People and Culture",
+    "People & Culture",
     "Lifestyle",
     "Space & Tech",
   ];
@@ -100,7 +100,7 @@ function Nav() {
           >
             close
           </span>
-          <div className="log-form-head">Create your LinX account</div>
+          <div className="log-form-head">Subscribe to LinX</div>
           <div className="log-form-imp">
             <span>Email</span>
             <input
@@ -270,9 +270,9 @@ function Nav() {
                   className="log-singup"
                   onClick={() => setSignUpOpen(true)}
                 >
-                  Sign up
+                  Subscribe
                 </button>{" "}
-                <button onClick={() => setSignInOpen(true)}>Sign in</button>
+                <span onClick={() => setSignInOpen(true)}>Log in</span>
               </div>
             )}
           </li>
