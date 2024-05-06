@@ -94,7 +94,7 @@ DATABASES = {
     }
 }
 
-DATABASES["default"] = dj_database_url.parse("postgres://personalprojects_kqsm_user:kshxLVbDydW9FGW4Z93EeZxcPwOWBfHA@dpg-copiac779t8c73fuo970-a.oregon-postgres.render.com/linx")
+# DATABASES["default"] = dj_database_url.parse("postgres://personalprojects_kqsm_user:kshxLVbDydW9FGW4Z93EeZxcPwOWBfHA@dpg-copiac779t8c73fuo970-a.oregon-postgres.render.com/linx")
  
 
 # Password validation
