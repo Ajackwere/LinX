@@ -11,6 +11,10 @@
 * {
   box-sizing: border-box;
 }
+title {
+  letter-spacing: 10px;
+  color: black;
+}
 body {
   font-family: "Montserrat", sans-serif;
   font-family: "Mulish", sans-serif;

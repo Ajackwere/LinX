@@ -4,6 +4,10 @@ const CONT = createContext(null);
 function Context({ children }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [userIsLoged, setUserIsLoged] = useState(false);
+  const [fetchCategory, setFetchCategory] = useState({
+    key: "all",
+    path: "/blogs",
+  });
   const [path, setPath] = useState([
     { title: "Dashboard", path: "/admin/dashboard" },
   ]);
@@ -16,6 +20,8 @@ function Context({ children }) {
     setPath,
     userIsLoged,
     setUserIsLoged,
+    fetchCategory,
+    setFetchCategory,
   };
 
   function formatCurrencyKE(number) {

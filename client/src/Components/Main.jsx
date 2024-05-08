@@ -17,6 +17,7 @@ function Main() {
     createRoutesFromElements(
       <Route path="/" element={<StateCheker />}>
         <Route path="/" element={<MainApp />}></Route>
+        <Route path="/ct/:query" element={<MainApp />}></Route>
         <Route path="/admin" element={<AdminCnt />}>
           <Route path="dashboard" element={<DashBoard />} />
           <Route path="posts" element={<Posts />} />

@@ -2,6 +2,7 @@ import React from "react";
 import "../../Styles/publick/footer.css";
 
 function Footer() {
+  const date = new Date();
   return (
     <footer className="site-footer">
       <div className="container">
@@ -61,8 +62,8 @@ function Footer() {
         <div className="row">
           <div className="col-md-8 col-sm-6 col-xs-12">
             <p className="copyright-text">
-              Copyright &copy; 2023 All Rights Reserved by
-              <a href="#">LinX</a>. Powerd by{" "}
+              Copyright &copy; {date.getFullYear()} All Rights Reserved by{" "}
+              LinX-ea. Powerd by{" "}
               <a
                 href="https://tech-dev.vercel.app/public_html/index.html"
                 target="_blank"
@@ -71,6 +72,7 @@ function Footer() {
                 Tech Dev
               </a>
             </p>
+            <p>Linx-ea.com is part of Ogonglo Agency</p>
           </div>
 
           <div className="col-md-4 col-sm-6 col-xs-12">

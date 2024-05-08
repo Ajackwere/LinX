@@ -10,17 +10,21 @@ import { baseUrl } from "../../../baseUrl";
 import { useMutation, useQuery } from "react-query";
 import axios from "axios";
 import Loader from "../Loader";
+import { useParams } from "react-router";
 
-function Blogs() {
+function Blogs({ rr = window.location.search }) {
   const vl = useContext(CONT);
   const blogCOntentRef = useRef(null);
+  const searchParams = new URLSearchParams(window.location.search);
+  const id = searchParams.get("id");
+  const { query } = useParams();
 
-  const blogs = useQuery("blogs", async () => {
-    const response = await axios.get(`${baseUrl}/blogs`, {
-      headers: {
-        Authorization: `Bearer ${vl.token}`,
-      },
-    });
+  const blogs = useQuery(`blogs_${query}`, async () => {
+    const response = await axios.get(
+      `${baseUrl}${
+        id ? "/blogs/posts_by_category/?category_id=" + id : "/blogs/"
+      }`
+    );
     return response.data;
   });
 
@@ -302,7 +306,7 @@ function Blogs() {
   };
 
   return (
-    <div className="blogs-cnt">
+    <div className="blogs-cnt" style={{ minHeight: "70vh" }}>
       {blogs.data
         ? blogs.data.map((blog) => {
             return <Blog blogData={blog} key={blog.id + blog.title} />;

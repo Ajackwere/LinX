@@ -1,10 +1,10 @@
 import React, { useContext, useState, useRef, useEffect } from "react";
 import "../../Styles/publick/nav.css";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate, useParams } from "react-router-dom";
 import { CONT } from "../../context/AppContext";
 import logo from "../../assets/link-logo.png";
 import { baseUrl } from "../../../baseUrl";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import Loader from "../Loader";
@@ -17,6 +17,16 @@ function Nav() {
   const navCategoryRef = useRef(null);
   const [signUpOpen, setSignUpOpen] = useState(false);
   const [signInOpen, setSignInOpen] = useState(false);
+  const navTo = useNavigate(null);
+  const searchParams = new URLSearchParams(window.location.search);
+  const categoryId = searchParams.get("id");
+  const { query } = useParams();
+  const [activeCategory, setActiveCategory] = useState(null);
+
+  useEffect(() => {
+    setActiveCategory(categoryId);
+  }, [query]);
+  console.log(activeCategory);
 
   useEffect(() => {
     const container = navCategoryRef.current;
@@ -34,13 +44,17 @@ function Nav() {
     );
   };
 
-  const categories = [
+  const categories = useQuery("categories", async () => {
+    const response = await axios.get(`${baseUrl}/categories/`);
+    return response.data;
+  });
+  /*   const categories = [
     "Health",
     "Entertainment",
     "People & Culture",
     "Lifestyle",
     "Space & Tech",
-  ];
+  ]; */
 
   const registerUser = useMutation(
     async (data) => {
@@ -148,7 +162,7 @@ function Nav() {
                 <Loader />
               </div>
             ) : (
-              "Sign up"
+              "Subscribe"
             )}
           </button>
         </form>
@@ -221,7 +235,6 @@ function Nav() {
       </div>
     );
   };
-
   return (
     <nav>
       <ToastContainer autoClose={5000} hideProgressBar theme={"light"} />
@@ -229,7 +242,12 @@ function Nav() {
       {signInOpen && <SignInForm />}
       <div className="nav-top">
         <div className="nav-logo">
-          <img src={logo} alt="" />
+          <img
+            src={logo}
+            alt=""
+            style={{ cursor: "pointer" }}
+            onClick={() => navTo("/")}
+          />
         </div>
         <div
           className="nav-categoriy-cnt nav-c1"
@@ -237,9 +255,21 @@ function Nav() {
           ref={navCategoryRef}
         >
           <ul className="nav-categories">
-            {categories.map((category) => (
-              <li key={category}>{category}</li>
-            ))}
+            {Array.isArray(categories.data) &&
+              categories.data.map((category) => (
+                <Link to={`/ct/${category.name}?id=${category.id}`}>
+                  <li
+                    key={category.name}
+                    style={
+                      activeCategory === `${category.id}`
+                        ? { backgroundColor: "#d5ad18" }
+                        : null
+                    }
+                  >
+                    {category.name}
+                  </li>
+                </Link>
+              ))}
           </ul>
         </div>
         <ul
@@ -299,9 +329,21 @@ function Nav() {
           ref={navCategoryRef}
         >
           <ul className="nav-categories">
-            {categories.map((category) => (
-              <li key={category}>{category}</li>
-            ))}
+            {Array.isArray(categories.data) &&
+              categories.data.map((category) => (
+                <Link to={`/ct/${category.name}?id=${category.id}`}>
+                  <li
+                    key={category.name}
+                    style={
+                      activeCategory === `${category.id}`
+                        ? { backgroundColor: "#d5ad18" }
+                        : null
+                    }
+                  >
+                    {category.name}
+                  </li>
+                </Link>
+              ))}
           </ul>
         </div>
       </div>
