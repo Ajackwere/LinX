@@ -98,6 +98,8 @@ class UserViewSet(viewsets.ViewSet):
 class UserProfileViewSet(viewsets.ModelViewSet):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
+    authentication_classes = [CsrfExemptSessionAuthentication, BasicAuthentication]
+
 
     @action(detail=False, methods=['POST'])
     def update_profile(self, request):
@@ -119,16 +121,22 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    authentication_classes = [CsrfExemptSessionAuthentication, BasicAuthentication]
+
 
 
 class TagViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
+    authentication_classes = [CsrfExemptSessionAuthentication, BasicAuthentication]
+
 
 
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+    authentication_classes = [CsrfExemptSessionAuthentication, BasicAuthentication]
+
     
     @action(detail=True, methods=['POST'])
     def like_comment(self, request, pk=None):
@@ -149,7 +157,8 @@ class CommentViewSet(viewsets.ModelViewSet):
 class BlogViewSet(viewsets.ModelViewSet):
     queryset = Blog.objects.all()
     serializer_class = BlogSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly] 
+    authentication_classes = [CsrfExemptSessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -224,6 +233,8 @@ def list_of_authors(request):
 class AdViewSet(viewsets.ModelViewSet):
     queryset = Ad.objects.all()
     serializer_class = AdSerializer
+    authentication_classes = [CsrfExemptSessionAuthentication, BasicAuthentication]
+    
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
