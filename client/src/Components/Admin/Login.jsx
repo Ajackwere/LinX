@@ -3,13 +3,38 @@ import { useMutation } from "react-query";
 import { baseUrl } from "../../../baseUrl";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import Loader from "../Loader";
 import { CONT } from "../../context/AppContext";
 
+// Import the js-cookie library for managing cookies
+import Cookies from "js-cookie";
+
+/* axios.defaults.withCredentials = true; */
 function Login() {
   const vl = useContext(CONT);
-  const navTo = useNavigate(null);
+  const navTo = useNavigate();
+
+  const log = async (data) => {
+    const response = await fetch(`${baseUrl}/userlogin/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: JSON.stringify(data),
+    });
+    const cookies = response.headers["set-cookie"];
+    console.log(cookies);
+    if (cookies) {
+      cookies.forEach((cookie) => {
+        const parsedCookie = cookie.split(";")[0]; // Extract cookie name and value
+        const [name, value] = parsedCookie.split("="); // Split into name and value
+        Cookies.set(name, value); // Set the cookie using js-cookie
+      });
+    }
+    return response.data;
+  };
+
   const loginUser = useMutation(
     async (data) => {
       const response = await axios.post(`${baseUrl}/userlogin/`, data);
@@ -17,7 +42,8 @@ function Login() {
     },
     {
       onSuccess: (data) => {
-        toast("Sign up successful");
+        toast("Sign in successful");
+        vl.setUserData(data);
         vl.setUserIsLoged(true);
         navTo("/admin/dashboard");
       },
@@ -34,7 +60,6 @@ function Login() {
         onSubmit={(e) => {
           e.preventDefault();
           const formData = new FormData(e.target);
-
           loginUser.mutate({
             username: formData.get("username"),
             password: formData.get("password"),

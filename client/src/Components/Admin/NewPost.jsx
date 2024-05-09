@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import "../../Styles/Account/newpost.css";
 import TextEditor from "../Reusables/TextEditor";
 import { useMutation, useQuery } from "react-query";
@@ -8,8 +8,10 @@ import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router";
 import Loader from "../Loader";
 import Cookies from "js-cookie";
+import { CONT } from "../../context/AppContext";
 
 function NewPost() {
+  const vl = useContext(CONT);
   const navTo = useNavigate(null);
   const categories = useQuery("categories", async () => {
     const response = await axios.get(`${baseUrl}/categories/`);
@@ -20,18 +22,16 @@ function NewPost() {
     category: 1,
     tags: [],
   });
-
+  /* ${Cookies.get("sessionid")} */
   const tags = useQuery("tags", async () => {
     const response = await axios.get(`${baseUrl}/tags/`);
     return response.data;
   });
-
   const postBlog = useMutation(
     async (data) => {
       const response = await axios.post(`${baseUrl}/blogs/`, data, {
         headers: {
-          "X-CSRFToken": Cookies.get("csrftoken"),
-          /* sessionid: Cookies.get("sessionid"), */
+          Authorization: `Session ${vl.userData.session_id}`,
         },
       });
       return response.data;
@@ -45,7 +45,7 @@ function NewPost() {
       },
     }
   );
-
+  console.log(vl.userData.session_id);
   const handleTagClick = (tagId) => {
     setPostData((prev) => {
       if (prev.tags.includes(tagId)) {
