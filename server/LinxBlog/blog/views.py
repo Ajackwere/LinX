@@ -42,10 +42,29 @@ class LoginView(APIView):
         if user is not None:
             login(request, user)
             session_key = request.session.session_key
-            return Response({'message': 'Login successful', 'session_id': session_key}, status=status.HTTP_200_OK)
+            
+            try:
+                user_profile = UserProfile.objects.get(user=user)
+                user_profile_data = UserProfileSerializer(user_profile).data
+            except UserProfile.DoesNotExist:
+                user_profile_data = None
+            
+            response_data = {
+                'message': 'Login successful',
+                'session_id': session_key,
+                'user': {
+                    'id': user.id,
+                    'username': user.username,
+                    'email': user.email,
+                    'first_name': user.first_name,
+                    'last_name': user.last_name,
+                },
+                'user_profile': user_profile_data
+            }
+            return Response(response_data, status=status.HTTP_200_OK)
         else:
             return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
-        
+            
 class UserViewSet(viewsets.ViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
