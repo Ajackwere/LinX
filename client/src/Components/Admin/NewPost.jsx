@@ -31,7 +31,7 @@ function NewPost() {
     async (data) => {
       const response = await axios.post(`${baseUrl}/blogs/`, data, {
         headers: {
-          Authorization: `Session ${vl.userData.session_id}`,
+          Authorization: `Session ${vl.userData?.session_id}`,
         },
       });
       return response.data;
@@ -45,7 +45,7 @@ function NewPost() {
       },
     }
   );
-  console.log(vl.userData.session_id);
+  console.log(vl.userData?.session_id);
   const handleTagClick = (tagId) => {
     setPostData((prev) => {
       if (prev.tags.includes(tagId)) {
