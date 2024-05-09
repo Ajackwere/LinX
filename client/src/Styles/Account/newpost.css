@@ -1,18 +1,25 @@
 .newpost-head {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 0.5rem;
+  gap: 1rem;
+  margin-bottom: 0.3rem;
 }
-.newpost-head input {
+.np-loader {
+  position: absolute;
+  top: 20vh;
+  left: 50vw;
+  transform: translateX(-50%);
+}
+.np-title {
+  margin: 0%;
   font-size: 2rem;
   background-color: transparent;
   border: none;
   border-bottom: solid 1px blue;
-  width: 80%;
+  width: 60%;
   display: block;
   outline: none;
-  margin-bottom: 0.3rem;
 }
 .newpost-head button {
   background-color: rgb(99, 99, 248);
@@ -21,4 +28,50 @@
   border-radius: 1rem;
   font-size: 1.1rem;
   padding: 5px 10px;
+  cursor: pointer;
+}
+.newpost-head button:hover {
+  background-color: rgb(78, 78, 247);
+}
+.np-tags {
+  width: 10rem;
+  height: 2rem;
+  box-shadow: #0000001a 0 4px 12px;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  padding: 0.3rem;
+}
+.np-tags:hover ul {
+  display: block;
+}
+.np-tags ul {
+  display: none;
+  box-shadow: #0000001a 0 4px 12px;
+  position: absolute;
+  top: 2rem;
+  left: 0%;
+  width: 10rem;
+  margin: 0%;
+  padding: 0%;
+  background-color: white;
+  z-index: 10;
+  overflow-y: auto;
+  max-height: 300px;
+}
+.np-tags li {
+  display: flex;
+  justify-content: flex-start;
+  gap: 0.3rem;
+  align-items: center;
+  padding: 0.3rem;
+  cursor: pointer;
+}
+.np-tags li:hover {
+  background-color: #f1f0f0;
+}
+.np-tags li span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

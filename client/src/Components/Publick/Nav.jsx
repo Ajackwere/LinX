@@ -26,7 +26,6 @@ function Nav() {
   useEffect(() => {
     setActiveCategory(categoryId);
   }, [query]);
-  console.log(activeCategory);
 
   useEffect(() => {
     const container = navCategoryRef.current;

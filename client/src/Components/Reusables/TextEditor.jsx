@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 /* import "@tinymce/tinymce-react/dist/main/css/main.min.css";
  */
-const TextEditor = ({ closeEditor, onChange = () => {} }) => {
+const TextEditor = ({ onChange = () => {} }) => {
   const [editorContent, setEditorContent] = useState("");
   const handleEditorChange = (content, editor) => {
     setEditorContent(content);
