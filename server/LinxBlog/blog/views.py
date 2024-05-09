@@ -14,7 +14,7 @@ from drf_yasg import openapi
 from django.db.models import Sum
 from django.utils import timezone
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import PermissionDenied, ValidationError
 from django.middleware.csrf import get_token
 from django.http import JsonResponse
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication 
@@ -198,7 +198,11 @@ class BlogViewSet(viewsets.ModelViewSet):
 
         if user_profile.is_author:
             request.data['author_id'] = request.user.id
-            return super().create(request, *args, **kwargs)
+            request.data['author_id'] = request.user.id
+            try:
+                return super().create(request, *args, **kwargs)
+            except ValidationError as e:
+                return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)            
         else:
             raise PermissionDenied(detail='User is not authorized to create a blog.')
     
