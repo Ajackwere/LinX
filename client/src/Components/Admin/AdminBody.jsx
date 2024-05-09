@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "../../Styles/Account/adminbody.css";
 import { CONT } from "../../context/AppContext";
 import { useNavigate } from "react-router";
@@ -6,7 +6,11 @@ import { Link } from "react-router-dom";
 
 function AdminBody({ Outlet }) {
   const vl = useContext(CONT);
+  const navTo = useNavigate(null);
   useEffect(() => {
+    if (!vl.serIsLoged) {
+      navTo("/admin/login");
+    }
     function menuToggole(e) {
       if (
         !e.target.closest(".admin-sidenav") &&

@@ -7,6 +7,7 @@ import { baseUrl } from "../../../baseUrl";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router";
 import Loader from "../Loader";
+import Cookies from "js-cookie";
 
 function NewPost() {
   const navTo = useNavigate(null);
@@ -27,7 +28,12 @@ function NewPost() {
 
   const postBlog = useMutation(
     async (data) => {
-      const response = await axios.post(`${baseUrl}/blogs/`, data);
+      const response = await axios.post(`${baseUrl}/blogs/`, data, {
+        headers: {
+          "X-CSRFToken": Cookies.get("csrftoken"),
+          /* sessionid: Cookies.get("sessionid"), */
+        },
+      });
       return response.data;
     },
     {

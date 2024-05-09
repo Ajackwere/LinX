@@ -11,6 +11,7 @@ import Authors from "./Admin/Authors";
 import NewPost from "./Admin/NewPost";
 import NewAd from "./Admin/NewAd";
 import "react-toastify/dist/ReactToastify.css";
+import Login from "./Admin/Login";
 
 function Main() {
   const routes = createBrowserRouter(
@@ -19,6 +20,7 @@ function Main() {
         <Route path="/" element={<MainApp />}></Route>
         <Route path="/ct/:query" element={<MainApp />}></Route>
         <Route path="/admin" element={<AdminCnt />}>
+          <Route path="login" element={<Login />} />
           <Route path="dashboard" element={<DashBoard />} />
           <Route path="posts" element={<Posts />} />
           <Route path="posts/new_post" element={<NewPost />} />
