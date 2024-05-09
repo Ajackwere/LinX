@@ -35,7 +35,7 @@ function NewPost() {
         navTo("/admin/posts");
       },
       onError: (error) => {
-        toast(`Failed to post blog, ${error.response.data?.message}`);
+        toast(`Failed to post blog, ${error.response.data?.detail}`);
       },
     }
   );
