@@ -104,7 +104,14 @@ function NewPost() {
           </div>
           <div className="select-card">
             <span>Category</span>{" "}
-            <select name="category" value={postData.category} id="">
+            <select
+              name="category"
+              value={postData.category}
+              onInput={(e) =>
+                setPostData((prev) => ({ ...prev, category: e.target.value }))
+              }
+              id=""
+            >
               {Array.isArray(categories.data) &&
                 categories.data.map((category) => (
                   <option key={category.id} value={category.id}>
