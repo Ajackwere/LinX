@@ -16,13 +16,14 @@ function DataTable({
     Array(data?.length).fill({ checked: false, pined: false, menu: false })
   );
 
-  const filteredData = filterBy
-    ? data?.filter((row) =>
-        row[filterBy]
-          .toLocaleLowerCase()
-          .includes(filterQuery.toLocaleLowerCase())
-      )
-    : data;
+  const filteredData =
+    filterBy !== null
+      ? data?.filter((row) =>
+          row[filterBy]
+            .toLocaleLowerCase()
+            .includes(filterQuery.toLocaleLowerCase())
+        )
+      : data;
   const vl = useContext(CONT);
   if (data === undefined) {
     return (

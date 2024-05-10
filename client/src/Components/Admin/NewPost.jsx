@@ -45,7 +45,7 @@ function NewPost() {
       },
     }
   );
-  console.log(vl.userData?.session_id);
+  console.log(`Session ${vl.userData?.session_id}`);
   const handleTagClick = (tagId) => {
     setPostData((prev) => {
       if (prev.tags.includes(tagId)) {

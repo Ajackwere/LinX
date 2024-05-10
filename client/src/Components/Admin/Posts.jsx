@@ -38,7 +38,7 @@ function Posts() {
       <div className="data-table-cnt acc-crd">
         <div className="data-table-head">
           <div className="table-menu-left">
-            <div className="table-data-count">{data.length}</div>
+            <div className="table-data-count">{blogs.data?.length}</div>
 
             <div className="table-search-m">
               <span className="material-symbols-outlined">search</span>{" "}

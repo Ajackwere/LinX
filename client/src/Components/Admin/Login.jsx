@@ -43,6 +43,7 @@ function Login() {
     {
       onSuccess: (data) => {
         toast("Sign in successful");
+        Cookies.set("token", data?.session_id);
         vl.setUserData(data);
         vl.setUserIsLoged(true);
         navTo("/admin/dashboard");
