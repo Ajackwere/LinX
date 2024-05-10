@@ -63,7 +63,7 @@ function Footer() {
           <div className="col-md-8 col-sm-6 col-xs-12">
             <p className="copyright-text">
               Copyright &copy; {date.getFullYear()} All Rights Reserved by{" "}
-              LinX-ea. Powerd by{" "}
+              LinX-ea. Powered by{" "}
               <a
                 href="https://tech-dev.vercel.app/public_html/index.html"
                 target="_blank"
