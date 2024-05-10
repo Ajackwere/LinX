@@ -98,6 +98,7 @@ function Blogs({ rr = window.location.search }) {
     } = blogData;
     const [comments, setComments] = useState(blogData.comments);
     const [commentCount, setCommentCount] = useState(comments_count);
+    const [isExpanded, setIsExpanded] = useState(false);
     const [isLiked, setIsLiked] = useState({ liked, dis_liked });
     const [commenting, setCommenting] = useState({ open: false, comment: "" });
     const [liekCount, setLikeCount] = useState(likes);
@@ -112,6 +113,16 @@ function Blogs({ rr = window.location.search }) {
       return false; // Assume no overflow initially
     };
     const [showReadMore, setShowReadMore] = useState(checkOverflow());
+    useEffect(() => {
+      const handleResize = () => {
+        setShowReadMore(checkOverflow());
+      };
+
+      window.addEventListener("resize", handleResize);
+
+      // Cleanup function to remove event listener on unmount
+      return () => window.removeEventListener("resize", handleResize);
+    }, []);
     useEffect(() => {
       const handleResize = () => {
         setShowReadMore(checkOverflow());
@@ -161,6 +172,7 @@ function Blogs({ rr = window.location.search }) {
         <span className="bc-title">{title}</span>
         <div
           className="blog-content"
+          ref={blogCOntentRef}
           dangerouslySetInnerHTML={{ __html: content }}
         ></div>
         <div className="bc-footer">

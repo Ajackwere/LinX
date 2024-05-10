@@ -73,6 +73,7 @@ function NewPost() {
               ...postData,
               title: formData.get("title"),
               category: formData.get("category"),
+              session_id: vl.userData?.session_id,
             });
           } else {
             toast("Tag is required!");
