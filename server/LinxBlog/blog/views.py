@@ -14,11 +14,12 @@ from drf_yasg import openapi
 from django.db.models import Sum
 from django.utils import timezone
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from rest_framework.exceptions import PermissionDenied, ValidationError
+from rest_framework.exceptions import PermissionDenied, ValidationError, AuthenticationFailed
 from django.middleware.csrf import get_token
 from django.http import JsonResponse
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication 
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication, BaseAuthentication 
 from rest_framework.views import APIView
+from django.contrib.sessions.backends.db import SessionStore
 
 
 class CsrfExemptSessionAuthentication(SessionAuthentication):
@@ -32,6 +33,19 @@ def get_csrf_token(request):
     csrf_token = get_token(request)
     return JsonResponse({'csrf_token': csrf_token})
 
+class JsonSessionAuthentication(BaseAuthentication):
+    def authenticate(self, request):
+        session_key = request.data.get('session_id')
+        if session_key:
+            try:
+                session = SessionStore(session_key=session_key)
+                user_id = session['_auth_user_id']
+                user = User.objects.get(pk=user_id)
+                return (user, None)
+            except Exception as e:
+                raise AuthenticationFailed('Invalid session ID')
+        return None
+    
 class LoginView(APIView):
     authentication_classes = [CsrfExemptSessionAuthentication, BasicAuthentication]
 
@@ -177,7 +191,7 @@ class CommentViewSet(viewsets.ModelViewSet):
 class BlogViewSet(viewsets.ModelViewSet):
     queryset = Blog.objects.all()
     serializer_class = BlogSerializer
-    authentication_classes = [CsrfExemptSessionAuthentication, BasicAuthentication]
+    authentication_classes = [CsrfExemptSessionAuthentication, JsonSessionAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def retrieve(self, request, *args, **kwargs):
