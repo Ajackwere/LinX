@@ -15,17 +15,7 @@ function DataTable({
   const [rowState, setRowState] = useState(
     Array(data?.length).fill({ checked: false, pined: false, menu: false })
   );
-
-  const filteredData =
-    filterBy !== null
-      ? data?.filter((row) =>
-          row[filterBy]
-            .toLocaleLowerCase()
-            .includes(filterQuery.toLocaleLowerCase())
-        )
-      : data;
-  const vl = useContext(CONT);
-  if (data === undefined) {
+  if (!data) {
     return (
       <>
         <br />
@@ -41,6 +31,17 @@ function DataTable({
       </>
     );
   }
+
+  const filteredData =
+    filterBy !== null
+      ? data?.filter((row) =>
+          row[filterBy]
+            ?.toLocaleLowerCase()
+            .includes(filterQuery?.toLocaleLowerCase())
+        )
+      : data;
+  const vl = useContext(CONT);
+
   const headers = Object.keys(data[0]);
   if (checker === true && checkerState === null) {
     alert(

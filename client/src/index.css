@@ -195,7 +195,7 @@ table td:nth-child(1) {
   width: 5rem;
 }
 th {
-  background-color: rgba(0, 255, 255, 0.129);
+  background-color: rgb(212, 243, 244);
 }
 
 tr:hover {

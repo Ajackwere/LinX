@@ -70,7 +70,7 @@ function Posts() {
             <span className="material-symbols-outlined">add</span>
           </div>
         </div>
-        <div style={{ position: "relative", height: "55vh" }}>
+        <div style={{ position: "relative", height: "55vh", overflow: "auto" }}>
           <div className="f-finance-table-cnt">
             <DataTable
               data={blogs.data?.map((post) => ({

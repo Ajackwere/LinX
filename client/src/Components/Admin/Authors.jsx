@@ -1,66 +1,41 @@
 import React, { useContext, useState } from "react";
-import "../../Styles/Account/ads.css";
-import "../../Styles/Account/authors.css";
 import DataTable from "../Reusables/Table";
 import { useNavigate } from "react-router";
+import "../../Styles/Account/post.css";
 import { CONT } from "../../context/AppContext";
 import { useQuery } from "react-query";
-import { baseUrl } from "../../../baseUrl";
 import axios from "axios";
+import { baseUrl } from "../../../baseUrl";
 
-function Authors() {
+function Posts() {
   const [filterBy, setFilterBy] = useState("first_name");
   const [searchQuery, setSearchQuery] = useState("");
   const [checkedData, setCheckedData] = useState([]);
-  const [addAuthor, setAddAuthor] = useState(false);
   const navTo = useNavigate(null);
   const vl = useContext(CONT);
   const data = [
     {
-      first_name: "frist",
-      second_name: "second",
-      email: "authoremail@gmail.com",
-      blogs: 28,
-      total_likes: 1200,
+      title: "First post",
+      body: "",
+      author: "Author",
+      create_date: "23/4/2024",
+      likes: "40",
+      dislikes: "4",
     },
   ];
   const authors = useQuery("totaAuthors", async () => {
     const response = await axios.get(baseUrl + "/list-of-authors/");
     return response.data;
   });
+  console.log(authors.data);
 
   return (
     <section>
-      {addAuthor && (
-        <div className="addAuthor-cnt">
-          <form
-            className="add-author"
-            onSubmit={(e) => {
-              e.preventDefault();
-            }}
-          >
-            <span
-              className="material-symbols-outlined"
-              onClick={() => setAddAuthor(false)}
-            >
-              close
-            </span>
-            <h1>Add author</h1>
-            <input type="text" name="first_name" placeholder="Frist name" />
-            <input type="text" name="second_name" placeholder="Second name" />
-            <input type="email" name="email" placeholder="email" />
-            <input type="text" name="password" placeholder="password" />
-            <div className="add-author-footer">
-              <button>Add</button>
-            </div>
-          </form>
-        </div>
-      )}
       <br />
       <div className="data-table-cnt acc-crd">
         <div className="data-table-head">
           <div className="table-menu-left">
-            <div className="table-data-count">{authors.data?.username}</div>
+            <div className="table-data-count">{authors.data?.length}</div>
 
             <div className="table-search-m">
               <span className="material-symbols-outlined">search</span>{" "}
@@ -75,23 +50,27 @@ function Authors() {
                 id=""
                 onChange={(e) => setFilterBy(e.target.value)}
               >
-                <option value="title">Title</option>
+                <option value="first_name">First name</option>
               </select>
             </div>
           </div>
           <div
             className="add-btn"
             onClick={() => {
-              setAddAuthor(true);
+              vl.setPath((prev) => [
+                ...prev,
+                { title: "New post", path: "/admin/dashboard/new_post" },
+              ]);
+              navTo("new_post");
             }}
           >
             <span className="material-symbols-outlined">add</span>
           </div>
         </div>
-        <div style={{ position: "relative", height: "55vh" }}>
+        <div style={{ position: "relative", height: "55vh", overflow: "auto" }}>
           <div className="f-finance-table-cnt">
             <DataTable
-              data={authors.data}
+              data={Array.isArray(authors.data) && authors.data}
               filterQuery={searchQuery}
               filterBy={filterBy}
               checker={true}
@@ -108,4 +87,4 @@ function Authors() {
   );
 }
 
-export default Authors;
+export default Posts;
