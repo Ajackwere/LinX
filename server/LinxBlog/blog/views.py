@@ -319,3 +319,14 @@ def author_details(request, author_id):
         'email': email
     }
     return Response(data)
+
+@api_view(['GET'])
+def search_blogs(request):
+    query = request.query_params.get('q', None)
+    if query:
+        blogs = Blog.objects.filter(title__icontains=query) | Blog.objects.filter(content__icontains=query)
+        serializer = BlogSerializer(blogs, many=True)
+        return Response(serializer.data)
+    else:
+        return Response({'error': 'No search query provided'}, status=status.HTTP_400_BAD_REQUEST)
+    

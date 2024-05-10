@@ -5,7 +5,7 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework import permissions
 from rest_framework.routers import DefaultRouter
-from blog.views import UserProfileViewSet, CategoryViewSet, TagViewSet, CommentViewSet, BlogViewSet, index, UserViewSet, total_signed_users, total_users_logged_in_today, total_posts, total_authors, list_of_posts, list_of_authors, AdViewSet, author_details, get_csrf_token, LoginView
+from blog.views import UserProfileViewSet, CategoryViewSet, TagViewSet, CommentViewSet, BlogViewSet, index, UserViewSet, total_signed_users, total_users_logged_in_today, total_posts, total_authors, list_of_posts, list_of_authors, AdViewSet, author_details, get_csrf_token, LoginView, search_blogs
 
 
 schema_view = get_schema_view(
@@ -34,6 +34,7 @@ router.register(r'ads', AdViewSet, basename='ad')
 urlpatterns = [
     path('', include(router.urls)),
     path('get-csrf-token/', get_csrf_token, name='get_csrf_token'),
+    path('search/', search_blogs, name='search_blogs'),
     path('userlogin/', LoginView.as_view(), name='userlogin'),
     path('blogs/posts_by_category/', BlogViewSet.as_view({'get': 'posts_by_category'}), name='posts_by_category'),
     path('total-signed-users/', total_signed_users, name='total_signed_users'),
