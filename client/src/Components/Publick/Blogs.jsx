@@ -1,20 +1,14 @@
-import React, {
-  useContext,
-  useEffect,
-  useReducer,
-  useRef,
-  useState,
-} from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { CONT } from "../../context/AppContext";
 import { baseUrl } from "../../../baseUrl";
 import { useMutation, useQuery } from "react-query";
+import "../../Styles/publick/blogs.css";
 import axios from "axios";
 import Loader from "../Loader";
 import { useParams } from "react-router";
 
 function Blogs({ rr = window.location.search }) {
   const vl = useContext(CONT);
-  const blogCOntentRef = useRef(null);
   const searchParams = new URLSearchParams(window.location.search);
   const id = searchParams.get("id");
   const { query } = useParams();
@@ -29,9 +23,8 @@ function Blogs({ rr = window.location.search }) {
   });
 
   const Comment = ({ commentData }) => {
-    const { username, profile, content, liked, dislikes, likes } = commentData;
-    const [isLiked, setIsLiked] = useState({ liked: false, dislikes: false });
-    const [liekCount, setLikeCount] = useState(likes);
+    const { username, profile, content, likes } = commentData;
+    const [likeCount, setLikeCount] = useState(likes);
     return (
       <div className="bc-comment">
         <div className="bc-c-head">
@@ -43,42 +36,15 @@ function Blogs({ rr = window.location.search }) {
         <div className="bc-c-body">
           {content}
           <div className="bc-like">
-            <div
-              className={isLiked.liked ? "bc-like-up bc-liked" : "bc-like-up"}
-            >
+            <div className="bc-like-up">
               <span
                 className="material-symbols-outlined"
                 style={{ cursor: "pointer" }}
-                onClick={() => {
-                  isLiked.liked
-                    ? setLikeCount((prev) => prev - 1)
-                    : setLikeCount((prev) => prev + 1),
-                    setIsLiked({
-                      dislikes: isLiked.dislikes
-                        ? !isLiked.dislikes
-                        : isLiked.dislikes,
-                      liked: !isLiked.liked,
-                    });
-                }}
+                onClick={() => setLikeCount((prev) => prev + 1)}
               >
                 thumb_up
               </span>{" "}
-              <span className="bc-l-count">{liekCount}</span>
-            </div>
-            <div className={isLiked.dislikes ? "bc-liked" : ""}>
-              <span
-                className="material-symbols-outlined"
-                onClick={() => {
-                  isLiked.liked ? setLikeCount((prev) => prev - 1) : null,
-                    setIsLiked({
-                      liked: isLiked.liked ? !isLiked.liked : isLiked.liked,
-                      dislikes: !isLiked.dislikes,
-                    });
-                }}
-                style={{ cursor: "pointer" }}
-              >
-                thumb_down
-              </span>
+              <span className="bc-l-count">{likeCount}</span>
             </div>
           </div>
         </div>
@@ -87,51 +53,34 @@ function Blogs({ rr = window.location.search }) {
   };
 
   const Blog = ({ blogData }) => {
-    const {
-      title,
-      content,
-      id,
-      liked,
-      dis_liked,
-      likes,
-      comments_count = 0,
-    } = blogData;
+    const { title, content, id, likes, comments_count = 0 } = blogData;
     const [comments, setComments] = useState(blogData.comments);
     const [commentCount, setCommentCount] = useState(comments_count);
-    const [isExpanded, setIsExpanded] = useState(false);
-    const [isLiked, setIsLiked] = useState({ liked, dis_liked });
     const [commenting, setCommenting] = useState({ open: false, comment: "" });
-    const [liekCount, setLikeCount] = useState(likes);
     const [saved, setSaved] = useState(blogData.saved);
-    const contentHeight = useRef(0);
+    const [isExpanded, setIsExpanded] = useState(false);
+    const blogContentRef = useRef(null);
+
+    useEffect(() => {
+      const handleResize = () => {
+        setShowReadMore(checkOverflow());
+      };
+
+      window.addEventListener("resize", handleResize);
+
+      return () => window.removeEventListener("resize", handleResize);
+    }, [content]);
+
     const checkOverflow = () => {
-      if (blogCOntentRef.current) {
-        const contentElement = blogCOntentRef.current;
-        contentHeight.current = contentElement.scrollHeight;
+      console.log(blogContentRef.current);
+      if (blogContentRef.current) {
+        const contentElement = blogContentRef.current;
         return contentElement.clientHeight < contentElement.scrollHeight;
       }
-      return false; // Assume no overflow initially
+      return false;
     };
+
     const [showReadMore, setShowReadMore] = useState(checkOverflow());
-    useEffect(() => {
-      const handleResize = () => {
-        setShowReadMore(checkOverflow());
-      };
-
-      window.addEventListener("resize", handleResize);
-
-      // Cleanup function to remove event listener on unmount
-      return () => window.removeEventListener("resize", handleResize);
-    }, []);
-    useEffect(() => {
-      const handleResize = () => {
-        setShowReadMore(checkOverflow());
-      };
-
-      window.addEventListener("resize", handleResize);
-
-      return () => window.removeEventListener("resize", handleResize);
-    }, []);
 
     const getComments = useMutation(
       async () => {
@@ -147,6 +96,7 @@ function Blogs({ rr = window.location.search }) {
         },
       }
     );
+
     const postComment = useMutation(
       async (data) => {
         const response = await axios.post(`${baseUrl}/comments/`, data);
@@ -161,6 +111,7 @@ function Blogs({ rr = window.location.search }) {
         },
       }
     );
+
     useEffect(() => {
       if (commenting.open) {
         getComments.mutate(id);
@@ -172,50 +123,12 @@ function Blogs({ rr = window.location.search }) {
         <span className="bc-title">{title}</span>
         <div
           className="blog-content"
-          ref={blogCOntentRef}
+          ref={blogContentRef}
           dangerouslySetInnerHTML={{ __html: content }}
+          style={isExpanded ? { maxHeight: "none" } : null}
         ></div>
         <div className="bc-footer">
           <div className="bc-footer-actions">
-            {/* <div className="bc-like">
-              <div
-                className={isLiked.liked ? "bc-like-up bc-liked" : "bc-like-up"}
-              >
-                <span
-                  className="material-symbols-outlined"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    isLiked.liked
-                      ? setLikeCount((prev) => prev - 1)
-                      : setLikeCount((prev) => prev + 1),
-                      setIsLiked({
-                        dis_liked: isLiked.dis_liked
-                          ? !isLiked.dis_liked
-                          : isLiked.dis_liked,
-                        liked: !isLiked.liked,
-                      });
-                  }}
-                >
-                  thumb_up
-                </span>{" "}
-                <span className="bc-l-count">{liekCount}</span>
-              </div>
-              <div className={isLiked.dis_liked ? "bc-liked" : ""}>
-                <span
-                  className="material-symbols-outlined"
-                  onClick={() => {
-                    isLiked.liked ? setLikeCount((prev) => prev - 1) : null,
-                      setIsLiked({
-                        liked: isLiked.liked ? !isLiked.liked : isLiked.liked,
-                        dis_liked: !isLiked.dis_liked,
-                      });
-                  }}
-                  style={{ cursor: "pointer" }}
-                >
-                  thumb_down
-                </span>
-              </div>
-            </div> */}
             <div
               className="bc-comment"
               style={{ cursor: "pointer" }}
@@ -226,30 +139,19 @@ function Blogs({ rr = window.location.search }) {
               <span className="material-symbols-outlined">chat_bubble</span>
               <span>{commentCount}</span>
             </div>
-            {showReadMore && ( // Only render button if content overflows
-              <div className="bc-footer">
-                {/* ... rest of the blog footer elements ... */}
-                <div
-                  className="bc-read-more"
-                  onClick={() => setIsExpanded(!isExpanded)}
-                >
-                  {isExpanded ? "read less" : "read more"}
-                </div>
-                {/* ... rest of the blog footer elements ... */}
+            {!showReadMore && (
+              <div
+                className="bc-read-more"
+                onClick={() => {
+                  setIsExpanded(!isExpanded);
+                }}
+              >
+                {isExpanded ? "read less" : "read more"}
               </div>
             )}
           </div>
-          <div className={saved ? "bc-liked" : ""}>
-            {/* <span
-              title="Save"
-              className="material-symbols-outlined"
-              style={{ cursor: "pointer", fontSize: "1.5rem" }}
-              onClick={() => setSaved((prev) => !prev)}
-            >
-              bookmark
-            </span> */}
-          </div>
         </div>
+        <div className={saved ? "bc-liked" : ""}></div>
         {commenting.open && (
           <div className="bc-comment-s">
             <form
@@ -286,33 +188,34 @@ function Blogs({ rr = window.location.search }) {
                 required
                 value={commenting.comment}
                 placeholder="Add comment..."
-                onChange={(e) => {
+                onChange={(e) =>
                   setCommenting((prev) => ({
                     ...prev,
                     comment: e.target.value,
-                  }));
-                }}
+                  }))
+                }
               ></textarea>
               <button>
                 <span className="material-symbols-outlined">send</span>
               </button>
             </form>
             <div className="bc-comments" style={{ padding: "1rem" }}>
-              {comments?.length > 0
-                ? comments.map((comment) => (
-                    <Comment
-                      commentData={comment}
-                      key={comment.username + comment.id}
-                    />
-                  ))
-                : getComments.isLoading && (
-                    <div className="center-loader">
-                      <Loader />
-                    </div>
-                  )}
+              {comments?.length > 0 ? (
+                comments.map((comment) => (
+                  <Comment
+                    commentData={comment}
+                    key={comment.username + comment.id}
+                  />
+                ))
+              ) : (
+                <div className="center-loader">
+                  <Loader />
+                </div>
+              )}
             </div>
           </div>
-        )}{" "}
+        )}
+        {console.log(blogContentRef.current)}
       </div>
     );
   };
@@ -320,29 +223,29 @@ function Blogs({ rr = window.location.search }) {
   return (
     <div className="blogs-cnt" style={{ minHeight: "70vh" }}>
       {blogs.data
-        ? blogs.data.map((blog) => {
-            return <Blog blogData={blog} key={blog.id + blog.title} />;
-          })
+        ? blogs.data.map((blog) => (
+            <Blog blogData={blog} key={blog.id + blog.title} />
+          ))
         : Array(5)
             .fill(2)
-            .map(() => (
+            .map((_, index) => (
               <div
                 className="blog-card"
                 style={{ border: "solid 1px #9a9898" }}
+                key={index}
               >
                 <span className="load-title skeleton"></span>
                 <div className="blog-content">
-                  <p className="load-p skeleton"></p>
-                  <p className="load-p skeleton"></p>
-                  <p className="load-p skeleton"></p>
-                  <p className="load-p skeleton"></p>
+                  {[...Array(4)].map((_, index) => (
+                    <p className="load-p skeleton" key={index}></p>
+                  ))}
                 </div>
                 <div className="bc-footer" style={{ padding: "0.3rem" }}>
                   <div className="bc-footer-actions">
                     <div className="bc-like-load">
-                      <div className="skeleton"></div>
-                      <div className="skeleton"></div>
-                      <div className="skeleton"></div>
+                      {[...Array(3)].map((_, index) => (
+                        <div className="skeleton" key={index}></div>
+                      ))}
                     </div>
                     <div className="bc-comment"></div>
                     <div className="bc-read-more-load skeleton"></div>
