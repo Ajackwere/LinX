@@ -17,8 +17,9 @@ function Main() {
   const routes = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<StateCheker />}>
-        <Route path="/" element={<MainApp />}></Route>
-        <Route path="/ct/:query" element={<MainApp />}></Route>
+        <Route path="/" element={<MainApp />} />
+        <Route path="/search/:q" element={<MainApp />} />
+        <Route path="/ct/:query" element={<MainApp />} />
         <Route path="/admin" element={<AdminCnt />}>
           <Route path="login" element={<Login />} />
           <Route path="dashboard" element={<DashBoard />} />

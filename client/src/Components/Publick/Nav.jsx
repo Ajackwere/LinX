@@ -22,6 +22,7 @@ function Nav() {
   const categoryId = searchParams.get("id");
   const { query } = useParams();
   const [activeCategory, setActiveCategory] = useState(null);
+  const [mobileSearch, setMobileSearch] = useState(false);
 
   useEffect(() => {
     setActiveCategory(categoryId);
@@ -47,13 +48,6 @@ function Nav() {
     const response = await axios.get(`${baseUrl}/categories/`);
     return response.data;
   });
-  /*   const categories = [
-    "Health",
-    "Entertainment",
-    "People & Culture",
-    "Lifestyle",
-    "Space & Tech",
-  ]; */
 
   const registerUser = useMutation(
     async (data) => {
@@ -234,6 +228,43 @@ function Nav() {
       </div>
     );
   };
+  const searchParam = new URLSearchParams(window.location.search);
+  const urlQuery = searchParam.get("q");
+  const Search = () => {
+    const [searching, setSearching] = useState(false);
+    console.log(urlQuery && !searching ? { value: urlQuery } : null);
+    return (
+      <form
+        className="nav-search"
+        onSubmit={(e) => {
+          e.preventDefault();
+          const formData = new FormData(e.target);
+          navTo(`/search/d?q=${formData.get("query")}`);
+        }}
+      >
+        <button>
+          <span className="material-symbols-outlined">search</span>
+        </button>
+
+        <input
+          type="text"
+          name="query"
+          className="nav-search-input"
+          {...(urlQuery && !searching ? { value: urlQuery } : null)}
+          placeholder="Search something here..."
+          onClick={() => setSearching(true)}
+          onChange={() => {}}
+        />
+        <span
+          className="material-symbols-outlined close-search"
+          onClick={() => setMobileSearch(false)}
+        >
+          close
+        </span>
+      </form>
+    );
+  };
+  console.log(mobileSearch);
   return (
     <nav>
       <ToastContainer autoClose={5000} hideProgressBar theme={"light"} />
@@ -276,17 +307,15 @@ function Nav() {
           style={{ gap: "0.8rem", alignItems: "center" }}
         >
           <li className="nav-search-li">
-            <div className="nav-search">
-              <span className="material-symbols-outlined">search</span>
-              <input
-                type="search"
-                className="nav-search-input"
-                placeholder="Search something"
-              />
-            </div>
+            <Search />
           </li>
           <div className="nav-search2">
-            <span className="material-symbols-outlined">search</span>
+            <span
+              className="material-symbols-outlined"
+              onClick={() => setMobileSearch(true)}
+            >
+              search
+            </span>
           </div>
           <li>
             {vl.userIsLoged ? (
@@ -346,6 +375,7 @@ function Nav() {
           </ul>
         </div>
       </div>
+      {mobileSearch && <Search />}
     </nav>
   );
 

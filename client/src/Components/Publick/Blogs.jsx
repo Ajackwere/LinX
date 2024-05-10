@@ -11,16 +11,24 @@ function Blogs({ rr = window.location.search }) {
   const vl = useContext(CONT);
   const searchParams = new URLSearchParams(window.location.search);
   const id = searchParams.get("id");
+  const urlQuery = searchParams.get("q");
   const { query } = useParams();
 
-  const blogs = useQuery(`blogs_${query}`, async () => {
-    const response = await axios.get(
-      `${baseUrl}${
-        id ? "/blogs/posts_by_category/?category_id=" + id : "/blogs/"
-      }`
-    );
-    return response.data;
-  });
+  const blogs = useQuery(
+    `blogs_${id ? id : urlQuery ? urlQuery : "blogs"}`,
+    async () => {
+      const response = await axios.get(
+        `${baseUrl}${
+          id
+            ? "/blogs/posts_by_category/?category_id=" + id
+            : urlQuery
+            ? "/search/?q=" + urlQuery
+            : "/blogs/"
+        }`
+      );
+      return response.data;
+    }
+  );
 
   const Comment = ({ commentData }) => {
     const { username, profile, content, likes } = commentData;
@@ -72,7 +80,6 @@ function Blogs({ rr = window.location.search }) {
     }, [blogContentRef.current]);
 
     const checkOverflow = () => {
-      console.log(blogContentRef.current);
       if (blogContentRef.current) {
         const contentElement = blogContentRef.current;
         return contentElement.clientHeight < contentElement.scrollHeight;
@@ -221,42 +228,56 @@ function Blogs({ rr = window.location.search }) {
 
   return (
     <div className="blogs-cnt" style={{ minHeight: "70vh" }}>
-      {blogs.data
-        ? blogs.data.map((blog) => (
+      {blogs.data ? (
+        blogs.data.length > 0 ? (
+          blogs.data.map((blog) => (
             <Blog blogData={blog} key={blog.id + blog.title} />
           ))
-        : Array(5)
-            .fill(2)
-            .map((_, index) => (
-              <div
-                className="blog-card"
-                style={{ border: "solid 1px #9a9898" }}
-                key={index}
-              >
-                <span className="load-title skeleton"></span>
-                <div className="blog-content">
-                  {[...Array(4)].map((_, index) => (
-                    <p className="load-p skeleton" key={index}></p>
-                  ))}
+        ) : urlQuery ? (
+          <div className="blog-card">
+            <span className="bc-title">
+              We couldn't find any results for <br />"{urlQuery}"
+            </span>{" "}
+          </div>
+        ) : (
+          <div className="blog-card">
+            <h1>No results found</h1>{" "}
+          </div>
+        )
+      ) : (
+        Array(5)
+          .fill(2)
+          .map((_, index) => (
+            <div
+              className="blog-card"
+              style={{ border: "solid 1px #9a9898" }}
+              key={index}
+            >
+              <span className="load-title skeleton"></span>
+              <div className="blog-content">
+                {[...Array(4)].map((_, index) => (
+                  <p className="load-p skeleton" key={index}></p>
+                ))}
+              </div>
+              <div className="bc-footer" style={{ padding: "0.3rem" }}>
+                <div className="bc-footer-actions">
+                  <div className="bc-like-load">
+                    {[...Array(3)].map((_, index) => (
+                      <div className="skeleton" key={index}></div>
+                    ))}
+                  </div>
+                  <div className="bc-comment"></div>
+                  <div className="bc-read-more-load skeleton"></div>
                 </div>
-                <div className="bc-footer" style={{ padding: "0.3rem" }}>
-                  <div className="bc-footer-actions">
-                    <div className="bc-like-load">
-                      {[...Array(3)].map((_, index) => (
-                        <div className="skeleton" key={index}></div>
-                      ))}
-                    </div>
-                    <div className="bc-comment"></div>
-                    <div className="bc-read-more-load skeleton"></div>
-                  </div>
-                  <div>
-                    <span title="Save" className="material-symbols-outlined">
-                      bookmark
-                    </span>
-                  </div>
+                <div>
+                  <span title="Save" className="material-symbols-outlined">
+                    bookmark
+                  </span>
                 </div>
               </div>
-            ))}
+            </div>
+          ))
+      )}
     </div>
   );
 }

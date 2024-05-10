@@ -73,6 +73,12 @@ nav ul li {
   background-color: var(--color6);
   padding: 3px;
 }
+.nav-search button {
+  cursor: pointer;
+  padding: 0%;
+  border: none;
+  background-color: transparent;
+}
 .nav-search .material-symbols-outlined {
   font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24;
   font-size: 1.5rem;
@@ -161,6 +167,10 @@ nav ul li {
 .log-btns {
   display: flex;
   gap: 0.5rem;
+  height: fit-content;
+}
+.log-btns button {
+  height: fit-content;
 }
 .log-btns span {
   margin-right: 0.5rem;
@@ -236,6 +246,9 @@ nav ul li {
 .log-submit-btn:hover {
   background-color: var(--color2);
 }
+.close-search {
+  display: none;
+}
 @media (max-width: 1100px) {
   .nav-c1 {
     display: none;
@@ -245,10 +258,23 @@ nav ul li {
   }
 }
 @media (max-width: 700px) {
-  .nav-search {
+  .nav-search-li {
     display: none;
+  }
+  .close-search {
+    display: block;
   }
   .nav-search2 {
     display: block;
+  }
+  .nav-search {
+    position: fixed;
+    top: 10vh;
+    left: 0%;
+    width: 100vw;
+    z-index: 10;
+  }
+  .nav-search input {
+    width: 85%;
   }
 }
