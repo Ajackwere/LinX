@@ -69,7 +69,7 @@ function Blogs({ rr = window.location.search }) {
       window.addEventListener("resize", handleResize);
 
       return () => window.removeEventListener("resize", handleResize);
-    }, [content]);
+    }, [blogContentRef.current]);
 
     const checkOverflow = () => {
       console.log(blogContentRef.current);
@@ -139,7 +139,7 @@ function Blogs({ rr = window.location.search }) {
               <span className="material-symbols-outlined">chat_bubble</span>
               <span>{commentCount}</span>
             </div>
-            {!showReadMore && (
+            {showReadMore && (
               <div
                 className="bc-read-more"
                 onClick={() => {
@@ -215,7 +215,6 @@ function Blogs({ rr = window.location.search }) {
             </div>
           </div>
         )}
-        {console.log(blogContentRef.current)}
       </div>
     );
   };
