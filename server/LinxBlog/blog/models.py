@@ -36,6 +36,7 @@ class Blog(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True, null=True)
     tags = models.ManyToManyField(Tag, blank=True)
     image = models.ImageField(upload_to='blog_images/', blank=True, null=True)
+    metadata = models.TextField(blank=True)
 
     def __str__(self):
         return self.title

@@ -55,7 +55,7 @@ class BlogSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Blog
-        fields = ['id', 'title', 'content', 'author', 'publish_date', 'category', 'tags', 'image', 'slug', 'comments_count']
+        fields = ['id', 'title', 'content', 'author', 'publish_date', 'category', 'tags', 'image', 'slug', 'comments_count', 'metadata']
         read_only_fields = ['author', 'comments_count']
     
     def get_comments_count(self, obj):
