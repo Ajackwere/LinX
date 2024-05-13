@@ -146,8 +146,8 @@ function Blogs({ rr = window.location.search }) {
               <span className="material-symbols-outlined">chat_bubble</span>
               <span>{commentCount}</span>
             </div>
-            {showReadMore && (
-              <div
+            {
+              /* showReadMore &&  */ <div
                 className="bc-read-more"
                 onClick={() => {
                   setIsExpanded(!isExpanded);
@@ -155,7 +155,7 @@ function Blogs({ rr = window.location.search }) {
               >
                 {isExpanded ? "read less" : "read more"}
               </div>
-            )}
+            }
           </div>
         </div>
         <div className={saved ? "bc-liked" : ""}></div>
