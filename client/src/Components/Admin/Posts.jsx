@@ -74,6 +74,7 @@ function Posts() {
           <div className="f-finance-table-cnt">
             <DataTable
               data={blogs.data?.map((post) => ({
+                id: post?.id,
                 title: post?.title,
                 author: post?.author?.username,
                 publish_date: vl.formatTime(post?.publish_date),
@@ -83,9 +84,14 @@ function Posts() {
               filterBy={filterBy}
               checker={true}
               checkerState={setCheckedData}
-              doubleClick={(id) =>
-                navTo(`/account/admin-panel/members/${member_id}`)
-              }
+              doubleClick={(id) => {
+                console.log(id);
+                vl.setPath((prev) => [
+                  ...prev,
+                  { title: "Edit post", path: `/admin/posts/edit/${id}` },
+                ]);
+                navTo(`/admin/posts/edit/${id}`);
+              }}
               doubleClickData="id"
             />
           </div>

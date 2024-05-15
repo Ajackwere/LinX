@@ -17,7 +17,7 @@
   background-color: transparent;
   border: none;
   border-bottom: solid 1px blue;
-  width: 60%;
+  width: 50%;
   display: block;
   outline: none;
 }
@@ -74,4 +74,23 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.np-meta-data {
+  width: 6rem;
+  box-shadow: #0000001a 0 4px 12px;
+  padding: 0.3rem;
+  position: relative;
+  cursor: pointer;
+}
+.np-meta-data textarea {
+  position: absolute;
+  top: 100%;
+  right: 50%;
+  font-family: sans-serif;
+  letter-spacing: 1px;
+  z-index: 10;
+  display: none;
+}
+.np-meta-data:hover textarea {
+  display: block;
 }

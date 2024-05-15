@@ -1,17 +1,18 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "../../Styles/Account/newpost.css";
 import TextEditor from "../Reusables/TextEditor";
 import { useMutation, useQuery } from "react-query";
 import axios from "axios";
 import { baseUrl } from "../../../baseUrl";
 import { ToastContainer, toast } from "react-toastify";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import Loader from "../Loader";
 import Cookies from "js-cookie";
 import { CONT } from "../../context/AppContext";
 
-function NewPost() {
+function EditPost() {
   const vl = useContext(CONT);
+  const { id } = useParams();
   const navTo = useNavigate(null);
   const categories = useQuery("categories", async () => {
     const response = await axios.get(`${baseUrl}/categories/`);
@@ -20,6 +21,7 @@ function NewPost() {
 
   const [postData, setPostData] = useState({
     category: 1,
+    content: null,
     tags: [],
   });
   /* ${Cookies.get("sessionid")} */
@@ -27,9 +29,31 @@ function NewPost() {
     const response = await axios.get(`${baseUrl}/tags/`);
     return response.data;
   });
+
+  const blog = useQuery(`blog_${id}`, async () => {
+    const response = await axios.get(`${baseUrl}/blogs/${id}`, {
+      headers: {
+        Authorization: `Bearer ${vl?.token}`,
+      },
+    });
+    return response.data;
+  });
+
+  useEffect(() => {
+    if (blog.data) {
+      const { content, title, metadata, tags } = blog.data;
+      setPostData({
+        content,
+        title,
+        metadata,
+        tags,
+      });
+    }
+  }, [blog.data]);
+
   const postBlog = useMutation(
     async (data) => {
-      const response = await axios.post(`${baseUrl}/blogs/`, data, {
+      const response = await axios.patch(`${baseUrl}/blogs/${id}`, data, {
         headers: {
           Authorization: `Session ${vl.userData?.session_id}`,
         },
@@ -41,7 +65,7 @@ function NewPost() {
         navTo("/admin/posts");
       },
       onError: (error) => {
-        toast(`Failed to post blog, ${error.response.data?.detail}`);
+        toast(`Failed to update blog, ${error.response.data?.detail}`);
       },
     }
   );
@@ -54,6 +78,7 @@ function NewPost() {
       }
     });
   };
+  console.log(postData);
   return (
     <div>
       <ToastContainer autoClose={5000} hideProgressBar theme={"light"} />
@@ -84,6 +109,10 @@ function NewPost() {
             type="text"
             className="np-title"
             name="title"
+            value={postData.title}
+            onInput={(e) =>
+              setPostData((prev) => ({ ...prev, title: e.target.value }))
+            }
             placeholder="Title"
             required
           />
@@ -137,13 +166,14 @@ function NewPost() {
                 ))}
             </select>
           </div>
-          <button type="submit">POST</button>
+          <button type="submit">Update</button>
         </section>
         <section>
           <TextEditor
             onChange={(data) =>
               setPostData((prev) => ({ ...prev, content: data }))
             }
+            initialText={postData.content}
           />
         </section>
       </form>
@@ -151,4 +181,4 @@ function NewPost() {
   );
 }
 
-export default NewPost;
+export default EditPost;

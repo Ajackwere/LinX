@@ -12,6 +12,7 @@ import NewPost from "./Admin/NewPost";
 import NewAd from "./Admin/NewAd";
 import "react-toastify/dist/ReactToastify.css";
 import Login from "./Admin/Login";
+import EditPost from "./Admin/EditPost";
 
 function Main() {
   const routes = createBrowserRouter(
@@ -24,6 +25,7 @@ function Main() {
           <Route path="login" element={<Login />} />
           <Route path="dashboard" element={<DashBoard />} />
           <Route path="posts" element={<Posts />} />
+          <Route path="posts/edit/:id" element={<EditPost />} />
           <Route path="posts/new_post" element={<NewPost />} />
           <Route path="ADs" element={<ADs />} />
           <Route path="ADs/new_ad" element={<NewAd />} />

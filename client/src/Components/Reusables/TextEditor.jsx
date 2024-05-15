@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 /* import "@tinymce/tinymce-react/dist/main/css/main.min.css";
  */
-const TextEditor = ({ onChange = () => {} }) => {
+const TextEditor = ({
+  onChange = () => {},
+  initialText = "Type something here...",
+}) => {
   const [editorContent, setEditorContent] = useState("");
   const handleEditorChange = (content, editor) => {
     setEditorContent(content);
@@ -14,7 +17,7 @@ const TextEditor = ({ onChange = () => {} }) => {
     <div className="dptext-editor-cnt">
       <Editor
         apiKey="w29gpcom19jht1ugyu6hw7xpqe77gz07emkrg6g6hoxd7o43" // Replace with your TinyMCE API key (optional)
-        initialValue="Type something here..."
+        initialValue={initialText}
         onInit={(evt, editor) => editor.setContent(editorContent)}
         onEditorChange={handleEditorChange}
         init={{
