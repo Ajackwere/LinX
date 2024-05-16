@@ -13,7 +13,7 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from django.db.models import Sum
 from django.utils import timezone
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
 from rest_framework.exceptions import PermissionDenied, ValidationError, AuthenticationFailed
 from django.middleware.csrf import get_token
 from django.http import JsonResponse
@@ -346,6 +346,9 @@ class SubscriberViewSet(viewsets.ModelViewSet):
     queryset = Subscriber.objects.all()
     serializer_class = SubscriberSerializer
     http_method_names = ['get', 'post', 'delete']
+    authentication_classes = [CsrfExemptSessionAuthentication]
+    permission_classes = [AllowAny]
+
 
     def create(self, request, *args, **kwargs):
         email = request.data.get('email')
