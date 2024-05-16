@@ -201,6 +201,18 @@ class BlogViewSet(viewsets.ModelViewSet):
         comments_count = Comment.objects.filter(blog=instance).count()
         data = serializer.data
         data['comments_count'] = comments_count
+        if instance.image:
+            data['image_url'] = instance.image.url
+        else:
+            data['image_url'] = None
+        
+        author_profile = instance.author.userprofile
+        data['author'] = {
+            'username': author_profile.user.username,
+            'email': author_profile.user.email,
+            'profile_picture': author_profile.profile_picture.url if author_profile.profile_picture else None,
+        }
+
         return Response(data)
     
 

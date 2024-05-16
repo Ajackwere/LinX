@@ -52,14 +52,19 @@ class BlogSerializer(serializers.ModelSerializer):
     category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), required=False)
     tags = serializers.PrimaryKeyRelatedField(many=True, queryset=Tag.objects.all(), required=False)
     comments_count = serializers.SerializerMethodField()
+    author_details = serializers.SerializerMethodField()
 
     class Meta:
         model = Blog
-        fields = ['id', 'title', 'content', 'author', 'publish_date', 'category', 'tags', 'image', 'slug', 'comments_count', 'metadata']
-        read_only_fields = ['author', 'comments_count']
+        fields = ['id', 'title', 'content', 'author', 'publish_date', 'category', 'tags', 'image', 'slug', 'comments_count', 'metadata', 'author_details']
+        read_only_fields = ['author', 'comments_count', 'author_details']
     
     def get_comments_count(self, obj):
         return Comment.objects.filter(blog=obj).count()
+    
+    def get_author_details(self, obj):
+        user_profile = obj.author.userprofile
+        return UserProfileSerializer(user_profile).data
     
 
     def create(self, validated_data):
@@ -86,6 +91,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(source='user.email', read_only=True)
     first_name = serializers.CharField(source='user.first_name', read_only=True)
     last_name = serializers.CharField(source='user.last_name', read_only=True)
+    profile_picture = serializers.ImageField(read_only=True)
 
     class Meta:
         model = UserProfile
