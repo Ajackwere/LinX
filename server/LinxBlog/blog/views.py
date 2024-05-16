@@ -3,10 +3,10 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .forms import UserProfileForm
-from .models import UserProfile, Tag, Category, Blog, Comment, User, LoginLogoutLog, Ad
+from .models import UserProfile, Tag, Category, Blog, Comment, User, LoginLogoutLog, Ad, Subscriber
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from .serializers import UserProfileSerializer, CategorySerializer, TagSerializer, CommentSerializer, BlogSerializer, UserSerializer, AdSerializer
+from .serializers import UserProfileSerializer, CategorySerializer, TagSerializer, CommentSerializer, BlogSerializer, UserSerializer, AdSerializer, SubscriberSerializer
 from rest_framework.decorators import action, api_view
 from django.contrib.auth.models import User
 from drf_yasg.utils import swagger_auto_schema
@@ -341,4 +341,34 @@ def search_blogs(request):
         return Response(serializer.data)
     else:
         return Response({'error': 'No search query provided'}, status=status.HTTP_400_BAD_REQUEST)
+
+class SubscriberViewSet(viewsets.ModelViewSet):
+    queryset = Subscriber.objects.all()
+    serializer_class = SubscriberSerializer
+    http_method_names = ['get', 'post', 'delete']
+
+    def create(self, request, *args, **kwargs):
+        email = request.data.get('email')
+        if not email:
+            return Response({'error': 'Email is required.'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        if Subscriber.objects.filter(email=email).exists():
+            return Response({'error': 'This email is already subscribed.'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
     
+    def destroy(self, request, *args, **kwargs):
+        email = request.data.get('email')
+        if not email:
+            return Response({'error': 'Email is required to unsubscribe.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            subscriber = Subscriber.objects.get(email=email)
+            subscriber.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Subscriber.DoesNotExist:
+            return Response({'error': 'This email is not subscribed.'}, status=status.HTTP_404_NOT_FOUND)
+        

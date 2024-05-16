@@ -60,7 +60,7 @@ class UserProfile(models.Model):
     bio = models.TextField(blank=True)
     website = models.URLField(blank=True)
     location = models.CharField(max_length=100, blank=True)
-    is_author = models.BooleanField(default=False)  # Added field for author status
+    is_author = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.username
@@ -90,3 +90,9 @@ class Ad(models.Model):
 
     def __str__(self):
         return self.title
+class Subscriber(models.Model):
+    email = models.EmailField(unique=True)
+    subscribed_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.email

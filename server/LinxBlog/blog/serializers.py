@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import UserProfile, Category, Tag, Blog, Comment
+from .models import UserProfile, Category, Tag, Blog, Comment, Subscriber
 from .models import Ad
 from django.utils.text import slugify
 
@@ -96,3 +96,10 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = ['username', 'email', 'first_name', 'last_name', 'profile_picture', 'bio', 'website', 'location', 'is_author']
+
+class SubscriberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subscriber
+        fields = ['email', 'subscribed_date']
+        read_only_fields = ['subscribed_date']
+        
