@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "../../Styles/Account/newpost.css";
 import TextEditor from "../Reusables/TextEditor";
 import { useMutation, useQuery } from "react-query";
@@ -8,6 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router";
 import Loader from "../Loader";
 import Cookies from "js-cookie";
+import { debounce, transform } from "lodash";
 import { CONT } from "../../context/AppContext";
 
 function NewPost() {
@@ -19,10 +20,10 @@ function NewPost() {
   });
 
   const [postData, setPostData] = useState({
-    category: 1,
+    category: "1",
     tags: [],
   });
-  /* ${Cookies.get("sessionid")} */
+
   const tags = useQuery("tags", async () => {
     const response = await axios.get(`${baseUrl}/tags/`);
     return response.data;
@@ -54,6 +55,30 @@ function NewPost() {
       }
     });
   };
+
+  const save = debounce(() => {
+    localStorage.setItem("draft", JSON.stringify(postData));
+  }, 500);
+
+  useEffect(() => {
+    const draft = localStorage.getItem("draft");
+    if (draft) {
+      setPostData(JSON.parse(draft));
+      console.log(JSON.parse(draft));
+      toast("You have unposted draft");
+    }
+  }, []);
+
+  console.log(postData);
+
+  useEffect(() => {
+    if (
+      postData.content &&
+      postData.content !== "<p>Type something here...</p>"
+    ) {
+      save();
+    }
+  }, [postData]);
   return (
     <div>
       <ToastContainer autoClose={5000} hideProgressBar theme={"light"} />
@@ -84,6 +109,10 @@ function NewPost() {
             type="text"
             className="np-title"
             name="title"
+            value={postData.title}
+            onInput={(e) =>
+              setPostData((prev) => ({ ...prev, title: e.target.value }))
+            }
             placeholder="Title"
             required
           />
@@ -144,6 +173,7 @@ function NewPost() {
             onChange={(data) =>
               setPostData((prev) => ({ ...prev, content: data }))
             }
+            initialText={postData.content || "<p>Type something here...</p>"}
           />
         </section>
       </form>

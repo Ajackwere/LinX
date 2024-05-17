@@ -13,6 +13,7 @@ import NewAd from "./Admin/NewAd";
 import "react-toastify/dist/ReactToastify.css";
 import Login from "./Admin/Login";
 import EditPost from "./Admin/EditPost";
+import Maintainance from "./Maintainance";
 
 function Main() {
   const routes = createBrowserRouter(
@@ -21,6 +22,7 @@ function Main() {
         <Route path="/" element={<MainApp />} />
         <Route path="/search/:q" element={<MainApp />} />
         <Route path="/ct/:query" element={<MainApp />} />
+        <Route path="/maintainance" element={<Maintainance />} />
         <Route path="/admin" element={<AdminCnt />}>
           <Route path="login" element={<Login />} />
           <Route path="dashboard" element={<DashBoard />} />

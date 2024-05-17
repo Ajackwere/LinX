@@ -78,7 +78,6 @@ function EditPost() {
       }
     });
   };
-  console.log(postData);
   return (
     <div>
       <ToastContainer autoClose={5000} hideProgressBar theme={"light"} />
