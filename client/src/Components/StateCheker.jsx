@@ -25,21 +25,23 @@ function StateCheker() {
     }
   }, [isMaintaining]);
 
-  if (maintaining) {
-    navTo("/maintainance");
-  }
+
 
   const fetchFolders = async () => {
-    console.log("rfbdv");
     try {
       const response = await axios.get(`${baseUrl}`);
       console.log(response.data);
     } catch (error) {
       setMaintaining(true);
+      navTo("/maintainance");
       console.log("Error fetching data:", error.data);
     }
   };
   fetchFolders();
+
+  if (maintaining) {
+    navTo("/maintainance");
+  }
 
   return <Outlet />;
 }
