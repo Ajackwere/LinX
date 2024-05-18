@@ -1,25 +1,31 @@
 from django.http import JsonResponse
-from .models import MaintenanceMode
 from django.urls import reverse
+from django.utils.decorators import decorator_from_middleware
+from .models import MaintenanceMode
 
 class MaintenanceMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
-
-    def __call__(self, request):
-        maintenance_mode, created = MaintenanceMode.objects.get_or_create(id=1)
-
-        admin_url = reverse('admin:index')
-        additional_admin_urls = [
+        self.admin_urls = [
+            reverse('admin:index'),
             'https://lin-x.vercel.app/admin/',
             'https://lin-x.vercel.app/admin/posts',
             'https://lin-x.vercel.app/admin/dashboard'
         ]
 
-        is_admin_request = request.path.startswith(admin_url) or any(request.path.startswith(url) for url in additional_admin_urls)
+    def __call__(self, request):
+        response = self.get_response(request)
+        return response
 
-        # Allow access to admin URLs even if maintenance mode is active
-        if maintenance_mode.is_active and not is_admin_request:
-            return JsonResponse({'message': 'Site under maintenance'}, status=503)
-
-        return self.get_response(request)
+    def process_request(self, request):
+        path = request.path_info.lstrip('/')
+        
+        if any(path.startswith(url) for url in self.admin_urls):
+            return None
+        
+        if request.method == 'GET' and path.startswith('blog/'):
+            maintenance_mode, _ = MaintenanceMode.objects.get_or_create(id=1)
+            if maintenance_mode.is_active:
+                return JsonResponse({'error': 'Service Unavailable. The Website is Under Maintenance.'}, status=503)
+        
+        return None

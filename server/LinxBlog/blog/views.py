@@ -3,7 +3,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .forms import UserProfileForm
-from .models import UserProfile, Tag, Category, Blog, Comment, User, LoginLogoutLog, Ad, Subscriber
+from .models import UserProfile, Tag, Category, Blog, Comment, User, LoginLogoutLog, Ad, Subscriber, MaintenanceMode
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from .serializers import UserProfileSerializer, CategorySerializer, TagSerializer, CommentSerializer, BlogSerializer, UserSerializer, AdSerializer, SubscriberSerializer
@@ -213,6 +213,10 @@ class BlogViewSet(viewsets.ModelViewSet):
             'profile_picture': author_profile.profile_picture.url if author_profile.profile_picture else None,
         }
 
+        maintenance_mode, _ = MaintenanceMode.objects.get_or_create(id=1)
+        data['maintenance_mode'] = maintenance_mode.is_active
+
+
         return Response(data)
     
 
@@ -374,4 +378,8 @@ class SubscriberViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Subscriber.DoesNotExist:
             return Response({'error': 'This email is not subscribed.'}, status=status.HTTP_404_NOT_FOUND)
-        
+
+@api_view(['GET'])
+def maintenance_mode_status(request):
+    maintenance_mode, _ = MaintenanceMode.objects.get_or_create(id=1)
+    return Response({'maintenance_mode': maintenance_mode.is_active})
