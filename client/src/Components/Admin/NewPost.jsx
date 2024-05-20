@@ -70,8 +70,6 @@ function NewPost() {
     }
   }, []);
 
-  console.log(postData);
-
   useEffect(() => {
     if (
       postData.content &&

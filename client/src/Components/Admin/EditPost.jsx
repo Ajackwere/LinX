@@ -7,8 +7,8 @@ import { baseUrl } from "../../../baseUrl";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router";
 import Loader from "../Loader";
-import Cookies from "js-cookie";
 import { CONT } from "../../context/AppContext";
+import { debounce, transform } from "lodash";
 
 function EditPost() {
   const vl = useContext(CONT);
@@ -83,6 +83,29 @@ function EditPost() {
       }
     });
   };
+
+  const save = debounce(() => {
+    localStorage.setItem("edit", JSON.stringify(postData));
+  }, 500);
+
+  useEffect(() => {
+    const edit = localStorage.getItem("edit");
+    if (edit) {
+      setPostData(JSON.parse(edit));
+      console.log(JSON.parse(edit));
+      toast("You have unpublished edit");
+    }
+  }, []);
+
+  useEffect(() => {
+    if (
+      postData.content &&
+      postData.content !== "<p>Type something here...</p>"
+    ) {
+      save();
+    }
+  }, [postData]);
+
   return (
     <div>
       <ToastContainer autoClose={5000} hideProgressBar theme={"light"} />
