@@ -123,6 +123,7 @@ function NewPost() {
               name="metadata"
               cols="30"
               rows="10"
+              maxLength={150}
               onChange={(e) =>
                 setPostData((prev) => ({ ...prev, metadata: e.target.value }))
               }

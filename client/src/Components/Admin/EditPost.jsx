@@ -12,6 +12,7 @@ import { CONT } from "../../context/AppContext";
 
 function EditPost() {
   const vl = useContext(CONT);
+  const [initialText, setInitialText] = useState("");
   const { id } = useParams();
   const navTo = useNavigate(null);
   const categories = useQuery("categories", async () => {
@@ -38,6 +39,10 @@ function EditPost() {
     });
     return response.data;
   });
+
+  useEffect(() => {
+    setInitialText();
+  }, [blog.data]);
 
   useEffect(() => {
     if (blog.data) {
@@ -121,6 +126,7 @@ function EditPost() {
               name="metadata"
               cols="30"
               rows="10"
+              maxLength={150}
               onChange={(e) =>
                 setPostData((prev) => ({ ...prev, metadata: e.target.value }))
               }
@@ -172,7 +178,7 @@ function EditPost() {
             onChange={(data) =>
               setPostData((prev) => ({ ...prev, content: data }))
             }
-            initialText={postData.content}
+            initialText={blog.data?.content}
           />
         </section>
       </form>

@@ -13,11 +13,13 @@ const TextEditor = ({
   useEffect(() => {
     onChange(editorContent);
   }, [editorContent]);
+
+  let textInit = initialText;
   return (
     <div className="dptext-editor-cnt">
       <Editor
         apiKey="w29gpcom19jht1ugyu6hw7xpqe77gz07emkrg6g6hoxd7o43" // Replace with your TinyMCE API key (optional)
-        initialValue={initialText}
+        initialValue={textInit}
         onInit={(evt, editor) => editor.setContent(editorContent)}
         onEditorChange={handleEditorChange}
         init={{
