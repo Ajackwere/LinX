@@ -1,65 +1,26 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { CONT } from "../../context/AppContext";
-import { baseUrl } from "../../../baseUrl";
-import { useMutation, useQuery } from "react-query";
+import "../../Styles/publick/blogview.css";
 import "../../Styles/publick/blogs.css";
-import axios from "axios";
-import Loader from "../Loader";
-import { useParams } from "react-router";
-import { Link } from "react-router-dom";
 
-function Blogs({ rr = window.location.search }) {
+import { useParams } from "react-router";
+import { useMutation, useQuery } from "react-query";
+import { baseUrl } from "../../../baseUrl";
+import axios from "axios";
+import Nav from "./Nav";
+import Footer from "./Footer";
+import { CONT } from "../../context/AppContext";
+import { Helmet } from "react-helmet";
+
+function BlogView() {
   const vl = useContext(CONT);
   const searchParams = new URLSearchParams(window.location.search);
   const id = searchParams.get("id");
   const urlQuery = searchParams.get("q");
-  const { query } = useParams();
 
-  const blogs = useQuery(
-    `blogs_${id ? id : urlQuery ? urlQuery : "blogs"}`,
-    async () => {
-      const response = await axios.get(
-        `${baseUrl}${
-          id
-            ? "/blogs/posts_by_category/?category_id=" + id
-            : urlQuery
-            ? "/search/?q=" + urlQuery
-            : "/blogs/"
-        }`
-      );
-      return response.data;
-    }
-  );
-
-  const Comment = ({ commentData }) => {
-    const { username, profile, content, likes } = commentData;
-    const [likeCount, setLikeCount] = useState(likes);
-    return (
-      <div className="bc-comment">
-        <div className="bc-c-head">
-          <div className="bc-c-h-profile">
-            <img src={profile} alt="" onError={vl.errorProfileImg} />
-          </div>
-          <span>{username}</span>
-        </div>
-        <div className="bc-c-body">
-          {content}
-          <div className="bc-like">
-            <div className="bc-like-up">
-              <span
-                className="material-symbols-outlined"
-                style={{ cursor: "pointer" }}
-                onClick={() => setLikeCount((prev) => prev + 1)}
-              >
-                thumb_up
-              </span>{" "}
-              <span className="bc-l-count">{likeCount}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
+  const blog = useQuery(`blog_${id}`, async () => {
+    const response = await axios.get(`${baseUrl}/blogs/${id}`);
+    return response.data;
+  });
 
   const Blog = ({ blogData }) => {
     const {
@@ -77,7 +38,6 @@ function Blogs({ rr = window.location.search }) {
     const [saved, setSaved] = useState(blogData.saved);
     const [isExpanded, setIsExpanded] = useState(false);
     const blogContentRef = useRef(null);
-    console.log(author_details);
     useEffect(() => {
       const handleResize = () => {
         setShowReadMore(checkOverflow());
@@ -135,18 +95,18 @@ function Blogs({ rr = window.location.search }) {
     }, [commenting.open]);
 
     return (
-      <div className="blog-card" key={id}>
-        <Link
+      <div className="blog-card" style={{ maxWidth: "800px" }}>
+        <span
           className="bc-title"
           to={`/view/blog?id=${id}`}
           style={{ fontSize: "1.3rem", color: "black" }}
         >
           {title}
-        </Link>
+        </span>
         <div
           className="blog-content"
           ref={blogContentRef}
-          style={isExpanded ? { maxHeight: "none" } : null}
+          style={{ maxHeight: "none" }}
         >
           <div dangerouslySetInnerHTML={{ __html: content }}></div>
           <div>
@@ -174,16 +134,6 @@ function Blogs({ rr = window.location.search }) {
               <span className="material-symbols-outlined">chat_bubble</span>
               <span>{commentCount}</span>
             </div>
-            {
-              /* showReadMore &&  */ <div
-                className="bc-read-more"
-                onClick={() => {
-                  setIsExpanded(!isExpanded);
-                }}
-              >
-                {isExpanded ? "read less" : "read more"}
-              </div>
-            }
           </div>
         </div>
         <div className={saved ? "bc-liked" : ""}></div>
@@ -255,59 +205,42 @@ function Blogs({ rr = window.location.search }) {
   };
 
   return (
-    <div className="blogs-cnt" style={{ minHeight: "70vh" }}>
-      {blogs.data ? (
-        blogs.data.length > 0 ? (
-          blogs.data.map((blog) => (
-            <Blog blogData={blog} key={blog.id + blog.title} />
-          ))
-        ) : urlQuery ? (
-          <div className="blog-card">
-            <span className="bc-title">
-              We couldn't find any results for <br />"{urlQuery}"
-            </span>{" "}
-          </div>
-        ) : (
-          <div className="blog-card">
-            <h1>No results found</h1>{" "}
-          </div>
-        )
+    <div>
+      <Helmet>
+        {/* <title>{blog.data?.title}</title>{" "} */}
+        {/* Redundant with useEffect, but optional to keep title in sync */}
+        <meta name="description" content={blog.data?.description} />
+        <meta property="og:url" content={`https://www.linx-ea.com`} />
+        <meta property="og:title" content={blog.data?.title} />
+        <meta property="og:description" content={blog.data?.metadata} />
+        <meta property="og:image" content={blog.data?.image} />
+        <meta property="og:type" content="article" />
+        {/* Add additional OG meta tags as needed */}
+      </Helmet>
+      <Nav />
+      {blog.data ? (
+        <Blog blogData={blog.data} />
       ) : (
-        Array(5)
+        Array(1)
           .fill(2)
           .map((_, index) => (
             <div
               className="blog-card"
-              style={{ border: "solid 1px #9a9898" }}
+              style={{ border: "solid 1px #9a9898", height: "70vh" }}
               key={index}
             >
               <span className="load-title skeleton"></span>
               <div className="blog-content">
-                {[...Array(4)].map((_, index) => (
+                {[...Array(6)].map((_, index) => (
                   <p className="load-p skeleton" key={index}></p>
                 ))}
-              </div>
-              <div className="bc-footer" style={{ padding: "0.3rem" }}>
-                <div className="bc-footer-actions">
-                  <div className="bc-like-load">
-                    {[...Array(3)].map((_, index) => (
-                      <div className="skeleton" key={index}></div>
-                    ))}
-                  </div>
-                  <div className="bc-comment"></div>
-                  <div className="bc-read-more-load skeleton"></div>
-                </div>
-                <div>
-                  <span title="Save" className="material-symbols-outlined">
-                    bookmark
-                  </span>
-                </div>
               </div>
             </div>
           ))
       )}
+      <Footer />
     </div>
   );
 }
 
-export default Blogs;
+export default BlogView;

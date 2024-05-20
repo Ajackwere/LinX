@@ -29,6 +29,13 @@ function Nav() {
   }, [query]);
 
   useEffect(() => {
+    const timer = setTimeout(() => {
+      setSignUpOpen(true);
+    }, 10000);
+    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
     const container = navCategoryRef.current;
     setShowLeftButton(container.scrollLeft > 0);
     setShowRightButton(
@@ -117,28 +124,7 @@ function Nav() {
               required
             />
           </div>
-          <div className="log-form-imp">
-            <span>Password</span>
-            <input
-              type="password"
-              name="password1"
-              placeholder="******"
-              minLength={6}
-              required
-            />
-          </div>
-          <div className="log-form-imp">
-            <span>Repeat password</span>
-            <input
-              type="password"
-              name="password2"
-              placeholder="******"
-              minLength={6}
-              required
-            />
-          </div>
-          <span>Remember me</span>
-          <input type="checkbox" />
+
           <button
             className="log-submit-btn"
             style={
@@ -232,7 +218,6 @@ function Nav() {
   const urlQuery = searchParam.get("q");
   const Search = () => {
     const [searching, setSearching] = useState(false);
-    console.log(urlQuery && !searching ? { value: urlQuery } : null);
     return (
       <form
         className="nav-search"
@@ -264,7 +249,6 @@ function Nav() {
       </form>
     );
   };
-  console.log(mobileSearch);
   return (
     <nav>
       <ToastContainer autoClose={5000} hideProgressBar theme={"light"} />
@@ -330,7 +314,7 @@ function Nav() {
                 >
                   Subscribe
                 </button>{" "}
-                <span onClick={() => setSignInOpen(true)}>Log in</span>
+                {/* <span onClick={() => setSignInOpen(true)}>Log in</span> */}
               </div>
             )}
           </li>

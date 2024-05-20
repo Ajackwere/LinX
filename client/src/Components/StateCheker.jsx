@@ -2,46 +2,55 @@ import React, { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router";
 import { baseUrl } from "../../baseUrl";
 import { useQuery } from "react-query";
-import axios from "axios";
 
 function StateCheker() {
-  const [maintaining, setMaintaining] = useState(false);
+  const navigate = useNavigate();
+  const [maintain, setMaintain] = useState(false);
 
-  const isMaintaining = useQuery(
+  /*   const isMaintaining = useQuery(
     "maintaining",
     async () => {
-      const response = await axios.get(baseUrl);
-      return response.data;
+      const response = await fetch(baseUrl);
+      if (!response.ok) {
+        const errorData = await response.json();
+        if (
+          response.status === 503 &&
+          errorData.message === "Site under maintenance"
+        ) {
+          setMaintain(true);
+        }
+        throw new Error(errorData.message || "Unknown error occurred");
+      }
+      return response.json();
     },
     {
-      refetchInterval: 300000, // Refetch data every 10 seconds (in milliseconds)
+      refetchInterval: 300000, // Refetch data every 300 seconds (5 minutes)
       refetchIntervalInBackground: true, // Allow refetching even when the component is not visible
     }
-  );
-  const navTo = useNavigate(null);
-  useEffect(() => {
-    if (isMaintaining.data?.message === "Site under maintenance") {
-      setMaintaining(true);
+  ); */
+
+  const tryi = async () => {
+    const response = await fetch(baseUrl);
+    console.log("Response code:", response.status); // Log the response code here
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      if (
+        response.status === 503 &&
+        errorData.message === "Site under maintenance"
+      ) {
+        setMaintain(true);
+      }
+      throw new Error(errorData.message || "Unknown error occurred");
     }
-  }, [isMaintaining]);
-
-
-
-  const fetchFolders = async () => {
-    try {
-      const response = await axios.get(`${baseUrl}`);
-      console.log(response.data);
-    } catch (error) {
-      setMaintaining(true);
-      navTo("/maintainance");
-      console.log("Error fetching data:", error.data);
-    }
+    return response.json();
   };
-  fetchFolders();
 
-  if (maintaining) {
-    navTo("/maintainance");
-  }
+  useEffect(() => {
+    if (maintain) {
+      navigate("/404");
+    }
+  }, [maintain, navigate]);
 
   return <Outlet />;
 }

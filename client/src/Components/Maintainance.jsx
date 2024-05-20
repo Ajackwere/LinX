@@ -6,7 +6,9 @@ function Maintainance() {
     <div className="main">
       <section className="advice">
         <h1 className="advice__title">
-          Site under construction or maintenance
+          Thank you for visiting us. However, our site is undergoing some
+          routine maintenance. You can still leave a message at
+          info@linx-ea.com.
         </h1>
         <p className="advice__description">
           <span>&lt;</span> building <span>/&gt;</span> not finished yet

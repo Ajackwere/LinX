@@ -42,7 +42,8 @@
   align-items: center;
 }
 .advice__title {
-  font-size: 3rem;
+  font-size: 2rem;
+  max-width: 70vw;
   text-align: center;
 }
 .advice__description {

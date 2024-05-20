@@ -39,6 +39,7 @@ function NewPost() {
     },
     {
       onSuccess: (data) => {
+        localStorage.removeItem("draft");
         navTo("/admin/posts");
       },
       onError: (error) => {

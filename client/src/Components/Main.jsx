@@ -14,6 +14,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Login from "./Admin/Login";
 import EditPost from "./Admin/EditPost";
 import Maintainance from "./Maintainance";
+import BlogView from "./Publick/BlogView";
 
 function Main() {
   const routes = createBrowserRouter(
@@ -22,6 +23,7 @@ function Main() {
         <Route path="/" element={<MainApp />} />
         <Route path="/search/:q" element={<MainApp />} />
         <Route path="/ct/:query" element={<MainApp />} />
+        <Route path="/view/:q" element={<BlogView />} />
         <Route path="/maintainance" element={<Maintainance />} />
         <Route path="/admin" element={<AdminCnt />}>
           <Route path="login" element={<Login />} />
