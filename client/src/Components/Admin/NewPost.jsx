@@ -18,7 +18,9 @@ function NewPost() {
     const response = await axios.get(`${baseUrl}/categories/`);
     return response.data;
   });
-
+  const [textEditorInit, setTextEditorInit] = useState(
+    "Type something here..."
+  );
   const [postData, setPostData] = useState({
     category: "1",
     tags: [],
@@ -65,7 +67,7 @@ function NewPost() {
     const draft = localStorage.getItem("draft");
     if (draft) {
       setPostData(JSON.parse(draft));
-      console.log(JSON.parse(draft));
+      setTextEditorInit(JSON.parse(draft).content);
       toast("You have unposted draft");
     }
   }, []);
@@ -173,7 +175,7 @@ function NewPost() {
             onChange={(data) =>
               setPostData((prev) => ({ ...prev, content: data }))
             }
-            initialText={postData.content || "<p>Type something here...</p>"}
+            initialText={textEditorInit}
           />
         </section>
       </form>
