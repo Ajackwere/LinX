@@ -67,6 +67,7 @@ function EditPost() {
     },
     {
       onSuccess: (data) => {
+        localStorage.removeItem("edit");
         navTo("/admin/posts");
       },
       onError: (error) => {
