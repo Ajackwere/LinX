@@ -67,7 +67,7 @@ function EditPost() {
 
   const postBlog = useMutation(
     async (data) => {
-      const response = await axios.put(`${baseUrl}/blogs/${id}/`, data, {
+      const response = await axios.put(`${baseUrl}/blogs/${id}`, data, {
         headers: {
           Authorization: `Session ${vl.userData?.session_id}`,
         },
