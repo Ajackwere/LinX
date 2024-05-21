@@ -23,17 +23,11 @@ function Nav() {
   const { query } = useParams();
   const [activeCategory, setActiveCategory] = useState(null);
   const [mobileSearch, setMobileSearch] = useState(false);
+  const [subscribed, setSubscribed] = useState(false);
 
   useEffect(() => {
     setActiveCategory(categoryId);
   }, [query]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setSignUpOpen(true);
-    }, 10000);
-    return () => clearInterval(timer);
-  }, []);
 
   useEffect(() => {
     const container = navCategoryRef.current;
@@ -41,6 +35,19 @@ function Nav() {
     setShowRightButton(
       container.scrollLeft < container.scrollWidth - container.clientWidth
     );
+    const isSubscribed = localStorage.getItem("subscribed");
+    if (isSubscribed) {
+      setSubscribed(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (subscribed) {
+        setSignUpOpen(true);
+      }
+    }, 10000);
+    return () => clearInterval(timer);
   }, []);
 
   const handleScroll = () => {
@@ -56,19 +63,20 @@ function Nav() {
     return response.data;
   });
 
-  const registerUser = useMutation(
+  const subscribeUser = useMutation(
     async (data) => {
-      const response = await axios.post(`${baseUrl}/users/register/`, data);
+      const response = await axios.post(`${baseUrl}/subscribers/`, data);
       return response.data;
     },
     {
       onSuccess: (data) => {
-        toast("Sign up successful");
+        toast("Subscribed successful");
+        localStorage.setItem("subscribed", true);
         vl.setUserIsLoged(true);
         setSignUpOpen(false);
       },
       onError: (error) => {
-        toast(`Failed to add user, ${error.response.data?.message}`);
+        toast(`Failed to subscribe, ${error.response.data?.message}`);
       },
     }
   );
@@ -98,10 +106,8 @@ function Nav() {
             e.preventDefault();
             const formData = new FormData(e.target);
             if (formData.get("password1") === formData.get("password2")) {
-              registerUser.mutate({
-                username: formData.get("email"),
-                password1: formData.get("password1"),
-                password2: formData.get("password2"),
+              subscribeUser.mutate({
+                email: formData.get("email"),
               });
             } else {
               toast("Password does not match!");
@@ -128,12 +134,12 @@ function Nav() {
           <button
             className="log-submit-btn"
             style={
-              registerUser.isLoading
+              subscribeUser.isLoading
                 ? { opacity: "0.5", pointerEvents: "none" }
                 : null
             }
           >
-            {registerUser.isLoading ? (
+            {subscribeUser.isLoading ? (
               <div
                 className="center-loader"
                 style={{ position: "absolute", top: "-5px", width: "100%" }}
@@ -302,21 +308,21 @@ function Nav() {
             </span>
           </div>
           <li>
-            {vl.userIsLoged ? (
+            {/*  {vl.userIsLoged ? (
               <div className="nav-profile">
                 <img src="" onError={vl.errorProfileImg} alt="" />
               </div>
-            ) : (
-              <div className="log-btns">
-                <button
-                  className="log-singup"
-                  onClick={() => setSignUpOpen(true)}
-                >
-                  Subscribe
-                </button>{" "}
-                {/* <span onClick={() => setSignInOpen(true)}>Log in</span> */}
-              </div>
-            )}
+            ) : ( */}
+            <div className="log-btns">
+              <button
+                className="log-singup"
+                onClick={() => (subscribed ? setSignUpOpen(true) : null)}
+              >
+                {subscribed ? "Subscribed" : "Subscribe"}
+              </button>{" "}
+              {/* <span onClick={() => setSignInOpen(true)}>Log in</span> */}
+            </div>
+            {/* )} */}
           </li>
         </ul>
       </div>

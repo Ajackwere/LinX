@@ -152,10 +152,8 @@ function Blogs({ rr = window.location.search }) {
           <div>
             <small>
               <i>
-                Published by {author_details?.username} email{" "}
-                <a href={`mailto:${author_details?.email}`}>
-                  {author_details?.email}
-                </a>{" "}
+                Published by {author_details?.first_name}{" "}
+                {author_details?.last_name}
                 on {vl.formatTime(publish_date)}
               </i>{" "}
             </small>

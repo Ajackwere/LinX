@@ -10,6 +10,7 @@ import Nav from "./Nav";
 import Footer from "./Footer";
 import { CONT } from "../../context/AppContext";
 import { Helmet } from "react-helmet";
+import Loader from "../Loader";
 
 function BlogView() {
   const vl = useContext(CONT);
@@ -110,13 +111,14 @@ function BlogView() {
         >
           <div dangerouslySetInnerHTML={{ __html: content }}></div>
           <div>
-            <small>
+            <small style={{ display: "flex", gap: "0.5rem" }}>
+              <div className="auth-profile">
+                <img src={author_details?.profile_picture} alt="" />
+              </div>
               <i>
-                Published by {author_details?.username} email{" "}
-                <a href={`mailto:${author_details?.email}`}>
-                  {author_details?.email}
-                </a>{" "}
-                on {vl.formatTime(publish_date)}
+                Published by {author_details?.first_name}{" "}
+                {author_details?.last_name} <br /> on{" "}
+                {vl.formatTime(publish_date)}
               </i>{" "}
             </small>
           </div>
