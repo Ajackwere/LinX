@@ -216,9 +216,7 @@ class BlogViewSet(viewsets.ModelViewSet):
         maintenance_mode, _ = MaintenanceMode.objects.get_or_create(id=1)
         data['maintenance_mode'] = maintenance_mode.is_active
 
-
         return Response(data)
-    
 
     def create(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -235,7 +233,7 @@ class BlogViewSet(viewsets.ModelViewSet):
                 return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)            
         else:
             raise PermissionDenied(detail='User is not authorized to create a blog.')
-    
+
     @action(detail=False, methods=['GET'])
     def posts_by_category(self, request):
         category_id = request.query_params.get('category_id')
@@ -250,7 +248,11 @@ class BlogViewSet(viewsets.ModelViewSet):
             return Response(serializer.data)
         else:
             return Response({'error': 'Category ID parameter is required.'}, status=status.HTTP_400_BAD_REQUEST)
-           
+
+    def partial_update(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        return super().update(request, *args, **kwargs)
+    
 @api_view(['GET'])
 def total_signed_users(request):
     total_users = User.objects.count()
