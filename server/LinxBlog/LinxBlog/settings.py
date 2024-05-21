@@ -64,6 +64,8 @@ CSRF_COOKIE_SAMESITE = None
 
 ROOT_URLCONF = 'LinxBlog.urls'
 
+APPEND_SLASH=False
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
