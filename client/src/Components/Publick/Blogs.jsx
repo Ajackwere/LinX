@@ -150,11 +150,14 @@ function Blogs({ rr = window.location.search }) {
         >
           <div dangerouslySetInnerHTML={{ __html: content }}></div>
           <div>
-            <small>
+            <small style={{ display: "flex", gap: "0.5rem" }}>
+              <div className="auth-profile">
+                <img src={author_details?.profile_picture} alt="" />
+              </div>
               <i>
                 Published by {author_details?.first_name}{" "}
-                {author_details?.last_name}
-                on {vl.formatTime(publish_date)}
+                {author_details?.last_name} <br /> on{" "}
+                {vl.formatTime(publish_date)}
               </i>{" "}
             </small>
           </div>
