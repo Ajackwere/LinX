@@ -12,20 +12,31 @@ import { debounce, transform } from "lodash";
 
 function EditPost() {
   const vl = useContext(CONT);
-  const [initialText, setInitialText] = useState("");
   const { id } = useParams();
   const navTo = useNavigate(null);
   const categories = useQuery("categories", async () => {
     const response = await axios.get(`${baseUrl}/categories/`);
     return response.data;
   });
+  const [textEditorInit, setTextEditorInit] = useState(
+    "Type something here..."
+  );
 
   const [postData, setPostData] = useState({
     category: 1,
     content: null,
     tags: [],
   });
-  /* ${Cookies.get("sessionid")} */
+
+  useEffect(() => {
+    const edit = localStorage.getItem("edit");
+    if (edit) {
+      setPostData(JSON.parse(edit));
+      setTextEditorInit(JSON.parse(edit).content);
+      toast("You have unpublished edit");
+    }
+  }, []);
+
   const tags = useQuery("tags", async () => {
     const response = await axios.get(`${baseUrl}/tags/`);
     return response.data;
@@ -41,11 +52,8 @@ function EditPost() {
   });
 
   useEffect(() => {
-    setInitialText();
-  }, [blog.data]);
-
-  useEffect(() => {
-    if (blog.data) {
+    console.log(blog.data && !localStorage.getItem("edit"));
+    if (blog.data && !localStorage.getItem("edit")) {
       const { content, title, metadata, tags } = blog.data;
       setPostData({
         content,
@@ -53,6 +61,7 @@ function EditPost() {
         metadata,
         tags,
       });
+      setTextEditorInit(content);
     }
   }, [blog.data]);
 
@@ -90,19 +99,7 @@ function EditPost() {
   }, 500);
 
   useEffect(() => {
-    const edit = localStorage.getItem("edit");
-    if (edit) {
-      setPostData(JSON.parse(edit));
-      console.log(JSON.parse(edit));
-      toast("You have unpublished edit");
-    }
-  }, []);
-
-  useEffect(() => {
-    if (
-      postData.content &&
-      postData.content !== "<p>Type something here...</p>"
-    ) {
+    if (postData.content && postData.content !== blog.data?.content) {
       save();
     }
   }, [postData]);
@@ -151,6 +148,7 @@ function EditPost() {
               cols="30"
               rows="10"
               maxLength={150}
+              value={postData.metadata}
               onChange={(e) =>
                 setPostData((prev) => ({ ...prev, metadata: e.target.value }))
               }
@@ -195,14 +193,23 @@ function EditPost() {
                 ))}
             </select>
           </div>
-          <button type="submit">Update</button>
+          <button
+            type="submit"
+            style={
+              postData.content && postData.content === blog.data?.content
+                ? { opacity: "0.4", pointerEvents: "none" }
+                : null
+            }
+          >
+            Update
+          </button>
         </section>
         <section>
           <TextEditor
             onChange={(data) =>
               setPostData((prev) => ({ ...prev, content: data }))
             }
-            initialText={blog.data?.content}
+            initialText={textEditorInit}
           />
         </section>
       </form>

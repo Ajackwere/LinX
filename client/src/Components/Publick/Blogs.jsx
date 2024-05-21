@@ -77,7 +77,6 @@ function Blogs({ rr = window.location.search }) {
     const [saved, setSaved] = useState(blogData.saved);
     const [isExpanded, setIsExpanded] = useState(false);
     const blogContentRef = useRef(null);
-    console.log(author_details);
     useEffect(() => {
       const handleResize = () => {
         setShowReadMore(checkOverflow());
