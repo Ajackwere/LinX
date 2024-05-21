@@ -316,7 +316,11 @@ function Nav() {
             <div className="log-btns">
               <button
                 className="log-singup"
-                onClick={() => (subscribed ? setSignUpOpen(true) : null)}
+                onClick={() => {
+                  if (!subscribed) {
+                    setSignUpOpen(true);
+                  }
+                }}
               >
                 {subscribed ? "Subscribed" : "Subscribe"}
               </button>{" "}
