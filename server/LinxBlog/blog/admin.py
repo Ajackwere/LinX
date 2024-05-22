@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Tag, Blog, Comment, Ad, UserProfile, MaintenanceMode
+from .models import Category, Tag, Blog, Comment, Ad, UserProfile, MaintenanceMode, Subscriber
 
 def make_author(modeladmin, request, queryset):
     queryset.update(is_author=True)
@@ -16,6 +16,8 @@ admin.site.register(Tag)
 admin.site.register(Blog)
 admin.site.register(Comment)
 admin.site.register(Ad)
+admin.site.register(Subscriber)
+
 @admin.register(MaintenanceMode)
 class MaintenanceModeAdmin(admin.ModelAdmin):
     list_display = ['is_active']
