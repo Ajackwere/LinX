@@ -126,7 +126,7 @@ function BlogView() {
 
         <div className="bc-footer">
           <div className="bc-footer-actions">
-            <div
+            {/* <div
               className="bc-comment"
               style={{ cursor: "pointer" }}
               onClick={() =>
@@ -135,7 +135,7 @@ function BlogView() {
             >
               <span className="material-symbols-outlined">chat_bubble</span>
               <span>{commentCount}</span>
-            </div>
+            </div> */}
           </div>
         </div>
         <div className={saved ? "bc-liked" : ""}></div>

@@ -164,7 +164,7 @@ function Blogs({ rr = window.location.search }) {
 
         <div className="bc-footer">
           <div className="bc-footer-actions">
-            <div
+            {/* <div
               className="bc-comment"
               style={{ cursor: "pointer" }}
               onClick={() =>
@@ -173,7 +173,7 @@ function Blogs({ rr = window.location.search }) {
             >
               <span className="material-symbols-outlined">chat_bubble</span>
               <span>{commentCount}</span>
-            </div>
+            </div> */}
             {
               /* showReadMore &&  */ <div
                 className="bc-read-more"
