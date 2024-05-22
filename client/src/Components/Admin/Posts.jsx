@@ -24,7 +24,7 @@ function Posts() {
     },
   ];
   const blogs = useQuery("blogs", async () => {
-    const response = await axios.get(`${baseUrl}/blogs`, {
+    const response = await axios.get(`${baseUrl}/blogs/`, {
       headers: {
         Authorization: `Bearer ${vl?.token}`,
       },
@@ -85,7 +85,6 @@ function Posts() {
               checker={true}
               checkerState={setCheckedData}
               doubleClick={(id) => {
-                console.log(id);
                 vl.setPath((prev) => [
                   ...prev,
                   { title: "Edit post", path: `/admin/posts/edit/${id}` },

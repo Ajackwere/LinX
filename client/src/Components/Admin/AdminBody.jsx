@@ -8,9 +8,9 @@ function AdminBody({ Outlet }) {
   const vl = useContext(CONT);
   const navTo = useNavigate(null);
   useEffect(() => {
-    if (!vl.serIsLoged) {
+    /* if (!vl.serIsLoged) {
       navTo("/admin/login");
-    }
+    } */
     function menuToggole(e) {
       if (
         !e.target.closest(".admin-sidenav") &&

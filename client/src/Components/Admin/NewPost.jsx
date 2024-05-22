@@ -64,11 +64,18 @@ function NewPost() {
   }, 500);
 
   useEffect(() => {
-    const draft = localStorage.getItem("draft");
-    if (draft) {
-      setPostData(JSON.parse(draft));
-      setTextEditorInit(JSON.parse(draft).content);
-      toast("You have unposted draft");
+    const edit = localStorage.getItem("draft");
+    if (edit) {
+      const answer = confirm(
+        "You have an unpublished post, do you want to continue creating post?"
+      );
+      if (answer) {
+        const parsedDraft = JSON.parse(edit);
+        setPostData(parsedDraft);
+        setTextEditorInit(parsedDraft.content);
+      } else {
+        localStorage.removeItem("draft");
+      }
     }
   }, []);
 
