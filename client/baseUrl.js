@@ -1,1 +1,1 @@
-export const baseUrl = "https://linx-2rrj.onrender.com";
+export const baseUrl = "http://server.linx-ea.com";

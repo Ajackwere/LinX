@@ -1,7 +1,16 @@
 import React from "react";
+import { useMutation, useQuery } from "react-query";
 import "../../Styles/publick/footer.css";
+import { baseUrl } from "../../../baseUrl";
+import axios from "axios";
+import { Link } from "react-router-dom";
 
 function Footer() {
+  const categories = useQuery("categories", async () => {
+    const response = await axios.get(`${baseUrl}/categories/`);
+    return response.data;
+  });
+
   const date = new Date();
   return (
     <footer className="site-footer">
@@ -20,21 +29,21 @@ function Footer() {
           <div className="col-xs-6 col-md-3">
             <h6>Categories</h6>
             <ul className="footer-links">
-              <li>
-                <a href="">Health</a>
-              </li>
-              <li>
-                <a href="">Entertainment</a>
-              </li>
-              <li>
-                <a href="">People and Culture</a>
-              </li>
-              <li>
-                <a href="">Lifestyle</a>
-              </li>
-              <li>
-                <a href="">Space & Tech</a>
-              </li>
+              {Array.isArray(categories.data) &&
+                categories.data.map((category) => (
+                  <Link to={`/ct/${category.name}?id=${category.id}`}>
+                    <li
+                      key={category.name}
+                      style={
+                        activeCategory === `${category.id}`
+                          ? { color: "#d5ad18" }
+                          : null
+                      }
+                    >
+                      {category.name}
+                    </li>
+                  </Link>
+                ))}
             </ul>
           </div>
 
